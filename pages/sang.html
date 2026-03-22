@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sang Truong — H & S Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<button class="mob-btn" onclick="toggleMob()">menu</button>
+
+<nav class="sidebar" id="sidebar">
+    <div class="brand">
+        <a href="../index.html" class="brand-name">H <span>&</span> S Lab</a>
+        <div class="brand-tagline">research portfolio</div>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Menu</div>
+
+        <a class="nav-item" href="../index.html">Home</a>
+
+        <div class="nav-item" onclick="toggleSub('sub-h', this)">
+            Hoang Nguyen <span class="nav-chevron">▶</span>
+        </div>
+        <div class="nav-sub" id="sub-h">
+            <a class="nav-sub-item" href="hoang.html">Profile</a>
+            <a class="nav-sub-item" href="hoang.html#projects">Projects</a>
+            <a class="nav-sub-item" href="hoang.html#files">Files</a>
+        </div>
+
+        <!-- Sang sub-menu — open by default on this page -->
+        <div class="nav-item open active" onclick="toggleSub('sub-s', this)">
+            Sang Truong <span class="nav-chevron">▶</span>
+        </div>
+        <div class="nav-sub open" id="sub-s">
+            <a class="nav-sub-item" href="#" onclick="switchTabById('profile');  return false;">Profile</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('files');    return false;">Files</a>
+        </div>
+
+        <a class="nav-item" href="../index.html#gallery">Gallery</a>
+        <a class="nav-item" href="../index.html#contact">Contact</a>
+    </div>
+
+    <div class="sidebar-foot">
+        <span class="live-dot"></span> GitHub Pages
+    </div>
+</nav>
+
+<!-- ── Main ── -->
+<main class="main">
+<div class="page-wrap">
+
+    <div class="kicker">Sang Truong</div>
+    <h1 class="page-title">Research <em>Profile</em></h1>
+
+    <!-- Tab bar -->
+    <div class="tab-bar" id="sang-tabs">
+        <a class="tab active" data-tab="profile"  onclick="switchTabById('profile');  return false;" href="#">Profile</a>
+        <a class="tab"        data-tab="projects" onclick="switchTabById('projects'); return false;" href="#">Projects</a>
+        <a class="tab"        data-tab="files"    onclick="switchTabById('files');    return false;" href="#">Files</a>
+    </div>
+
+    <!-- ── Tab: Profile ── -->
+    <div class="tab-panel active" id="profile">
+
+        <div class="profile-header">
+            <div class="avatar">
+                <!-- Replace with: <img src="../images/sang.jpg" alt="Sang"> -->
+                ST
+            </div>
+            <div>
+                <div class="profile-name">Sang Truong</div>
+                <div class="profile-role">Hardware Design · ML Architecture · Embedded Systems</div>
+                <div class="profile-bio">
+                    Hardware development from passive components to microcontrollers, combined
+                    with neural network design and training. Interested in the intersection of
+                    embedded hardware and machine intelligence.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">Skills</div>
+        <div class="skills">
+            <span class="skill">Electronics</span>
+            <span class="skill">Arduino / ESP32</span>
+            <span class="skill">Python</span>
+            <span class="skill">PyTorch</span>
+            <span class="skill">Neural Networks</span>
+            <span class="skill">Supervised Learning</span>
+            <span class="skill">PCB Design</span>
+            <span class="skill">Embedded Systems</span>
+        </div>
+
+        <div class="section-label">Timeline</div>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-date">2025</div>
+                <div>
+                    <div class="tl-title">Multi-layer neural network experiments</div>
+                    <div class="tl-desc">Testing hidden-layer configurations and activation functions for classification tasks.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2024</div>
+                <div>
+                    <div class="tl-title">Passive component fundamentals</div>
+                    <div class="tl-desc">In-depth study of R, L, C behaviour and filter circuits before advancing to MCU integration.</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /profile -->
+
+    <!-- ── Tab: Projects ── -->
+    <div class="tab-panel" id="projects">
+
+        <div class="cards">
+            <div class="card">
+                <div class="card-tag">Electronics · Hardware</div>
+                <div class="card-title">Passive component analysis</div>
+                <div class="card-desc">
+                    Deep study of resistor, inductor and capacitor behaviour. Low-pass / high-pass
+                    filters and voltage divider circuits applied to real PCB designs.
+                </div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-tag">Python · PyTorch</div>
+                <div class="card-title">Neural network architecture</div>
+                <div class="card-desc">
+                    Experimenting with hidden-layer depth, ReLU vs Sigmoid activations and
+                    supervised training on labelled datasets.
+                </div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /projects -->
+
+    <!-- ── Tab: Files ── -->
+    <div class="tab-panel" id="files">
+
+        <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:24px;line-height:1.7;">
+            Files are managed via the GitHub repository.
+            To add a file, push it to the repo and add a row below.
+        </p>
+
+        <div class="section-label">Source code</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.ino</span>
+                <span class="file-name">rc_filter_test.ino</span>
+                <span class="file-desc">Arduino RC filter measurement</span>
+                <!-- Update href to the real path, e.g. href="../code/sang/rc_filter_test.ino" -->
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.py</span>
+                <span class="file-name">nn_train.py</span>
+                <span class="file-desc">PyTorch training script</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
+
+        <div class="section-label" style="margin-top:28px;">Reports</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.pdf</span>
+                <span class="file-name">passive_components_study.pdf</span>
+                <span class="file-desc">Component analysis notes</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
+
+    </div><!-- /files -->
+
+</div><!-- /page-wrap -->
+</main>
+
+<script src="../js/nav.js"></script>
+<script>
+    /* ── Tab switching for this page ── */
+    function switchTabById(tabId) {
+        document.querySelectorAll('#sang-tabs .tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === tabId);
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => {
+            p.classList.toggle('active', p.id === tabId);
+        });
+        /* sync sidebar highlight */
+        document.querySelectorAll('#sub-s .nav-sub-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        const idx = ['profile','projects','files'].indexOf(tabId);
+        const sideItems = document.querySelectorAll('#sub-s .nav-sub-item');
+        if (sideItems[idx]) sideItems[idx].classList.add('active');
+
+        history.replaceState(null, '', '#' + tabId);
+    }
+
+    /* ── Open tab from URL hash on load ── */
+    document.addEventListener('DOMContentLoaded', function () {
+        const hash = window.location.hash.replace('#', '');
+        if (['profile','projects','files'].includes(hash)) {
+            switchTabById(hash);
+        } else {
+            switchTabById('profile');
+        }
+    });
+</script>
+</body>
+</html>

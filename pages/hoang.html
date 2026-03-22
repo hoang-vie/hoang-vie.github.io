@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoang Nguyen — H & S Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- ── Sidebar ── -->
+<button class="mob-btn" onclick="toggleMob()">menu</button>
+
+<nav class="sidebar" id="sidebar">
+    <div class="brand">
+        <a href="../index.html" class="brand-name">H <span>&</span> S Lab</a>
+        <div class="brand-tagline">research portfolio</div>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Menu</div>
+
+        <a class="nav-item" href="../index.html">Home</a>
+
+        <!-- Hoang sub-menu — open by default on this page -->
+        <div class="nav-item open active" onclick="toggleSub('sub-h', this)">
+            Hoang Nguyen <span class="nav-chevron">▶</span>
+        </div>
+        <div class="nav-sub open" id="sub-h">
+            <a class="nav-sub-item" href="#" onclick="switchTabById('profile'); return false;">Profile</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('files'); return false;">Files</a>
+        </div>
+
+        <div class="nav-item" onclick="toggleSub('sub-s', this)">
+            Sang Truong <span class="nav-chevron">▶</span>
+        </div>
+        <div class="nav-sub" id="sub-s">
+            <a class="nav-sub-item" href="sang.html">Profile</a>
+            <a class="nav-sub-item" href="sang.html#projects">Projects</a>
+            <a class="nav-sub-item" href="sang.html#files">Files</a>
+        </div>
+
+        <a class="nav-item" href="../index.html#gallery">Gallery</a>
+        <a class="nav-item" href="../index.html#contact">Contact</a>
+    </div>
+
+    <div class="sidebar-foot">
+        <span class="live-dot"></span> GitHub Pages
+    </div>
+</nav>
+
+<!-- ── Main ── -->
+<main class="main">
+<div class="page-wrap">
+
+    <div class="kicker">Hoang Nguyen</div>
+    <h1 class="page-title">Research <em>Profile</em></h1>
+
+    <!-- Tab bar -->
+    <div class="tab-bar" id="hoang-tabs">
+        <a class="tab active" data-tab="profile"  onclick="switchTabById('profile');  return false;" href="#">Profile</a>
+        <a class="tab"        data-tab="projects" onclick="switchTabById('projects'); return false;" href="#">Projects</a>
+        <a class="tab"        data-tab="files"    onclick="switchTabById('files');    return false;" href="#">Files</a>
+    </div>
+
+    <!-- ── Tab: Profile ── -->
+    <div class="tab-panel active" id="profile">
+
+        <div class="profile-header">
+            <div class="avatar">
+                <!-- Replace with: <img src="../images/hoang.jpg" alt="Hoang"> -->
+                HN
+            </div>
+            <div>
+                <div class="profile-name">Hoang Nguyen</div>
+                <div class="profile-role">Signal Processing · Data Analysis · 3D Modelling</div>
+                <div class="profile-bio">
+                    Focused on system analysis, geometric modelling and physical signal processing.
+                    Primary interests: optical component optimisation and experimental data
+                    visualisation in the ROOT / C++ ecosystem.
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">Skills</div>
+        <div class="skills">
+            <span class="skill">C++</span>
+            <span class="skill">ROOT Framework</span>
+            <span class="skill">OpenSCAD</span>
+            <span class="skill">Python</span>
+            <span class="skill">Signal Processing</span>
+            <span class="skill">Histogram Analysis</span>
+            <span class="skill">3D Modelling</span>
+            <span class="skill">Data Visualisation</span>
+        </div>
+
+        <div class="section-label">Timeline</div>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-date">2025</div>
+                <div>
+                    <div class="tl-title">Optical geometry optimisation</div>
+                    <div class="tl-desc">Redesigned scintillator housing in OpenSCAD. Estimated +18% light collection improvement.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">2024</div>
+                <div>
+                    <div class="tl-title">ROOT analysis pipeline</div>
+                    <div class="tl-desc">Automated array data extraction, multi-histogram rendering and legend customisation.</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /profile -->
+
+    <!-- ── Tab: Projects ── -->
+    <div class="tab-panel" id="projects">
+
+        <div class="cards">
+            <div class="card">
+                <div class="card-tag">OpenSCAD · 3D</div>
+                <div class="card-title">Optical component simulation</div>
+                <div class="card-desc">
+                    Custom geometry design for light-collecting components. Transition from cylinder
+                    to cube form to improve solid-angle coverage and fabrication ease.
+                </div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-tag">C++ · ROOT</div>
+                <div class="card-title">Data analysis & histogramming</div>
+                <div class="card-desc">
+                    Array data extraction pipeline, h_sampic histogram generation and TLegend
+                    refinement inside ROOT framework for physics experiments.
+                </div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /projects -->
+
+    <!-- ── Tab: Files ── -->
+    <div class="tab-panel" id="files">
+
+        <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:24px;line-height:1.7;">
+            Files are managed via the GitHub repository.
+            To add a file, push it to the repo and add a row below.
+        </p>
+
+        <div class="section-label">Source code</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.scad</span>
+                <span class="file-name">optical_housing_v2.scad</span>
+                <span class="file-desc">Cube geometry — scintillator housing</span>
+                <!-- Update href to the real path, e.g. href="../code/hoang/optical_housing_v2.scad" -->
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.cpp</span>
+                <span class="file-name">histogram_pipeline.cpp</span>
+                <span class="file-desc">h_sampic extraction & ROOT render</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
+
+        <div class="section-label" style="margin-top:28px;">Reports</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.pdf</span>
+                <span class="file-name">analysis_report_2024.pdf</span>
+                <span class="file-desc">Experimental results summary</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
+
+    </div><!-- /files -->
+
+</div><!-- /page-wrap -->
+</main>
+
+<script src="../js/nav.js"></script>
+<script>
+    /* ── Tab switching for this page ── */
+    function switchTabById(tabId) {
+        document.querySelectorAll('#hoang-tabs .tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === tabId);
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => {
+            p.classList.toggle('active', p.id === tabId);
+        });
+        /* sync sidebar highlight */
+        document.querySelectorAll('#sub-h .nav-sub-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        const idx = ['profile','projects','files'].indexOf(tabId);
+        const sideItems = document.querySelectorAll('#sub-h .nav-sub-item');
+        if (sideItems[idx]) sideItems[idx].classList.add('active');
+
+        /* update URL hash without page jump */
+        history.replaceState(null, '', '#' + tabId);
+    }
+
+    /* ── Open tab from URL hash on load ── */
+    document.addEventListener('DOMContentLoaded', function () {
+        const hash = window.location.hash.replace('#', '');
+        if (['profile','projects','files'].includes(hash)) {
+            switchTabById(hash);
+        } else {
+            switchTabById('profile');
+        }
+    });
+</script>
+</body>
+</html>
