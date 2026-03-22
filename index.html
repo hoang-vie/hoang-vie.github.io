@@ -3,153 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Của Chúng Tôi</title>
+    <title>Portfolio Nghiên Cứu & Kỹ Thuật</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS: Thiết lập nguyên lý dàn trang cơ bản */
+        /* NGUYÊN LÝ 1: Khai báo Biến CSS (CSS Variables)
+           Giúp quản lý màu sắc toàn cục. Khi cần đổi màu web, chỉ cần đổi ở đây. */
+        :root {
+            --primary-bg: #0f172a;    /* Xanh đen sâu cho Sidebar */
+            --secondary-bg: #1e293b;  /* Xanh đen nhạt cho Menu con */
+            --main-bg: #f8fafc;       /* Trắng xám cho nội dung chính */
+            --text-main: #334155;     /* Xám đậm cho chữ để đỡ mỏi mắt */
+            --text-light: #f1f5f9;    /* Trắng sáng cho chữ trên nền tối */
+            --accent-color: #3b82f6;  /* Xanh dương làm điểm nhấn (nút, link) */
+            --card-bg: #ffffff;
+        }
+
+        /* NGUYÊN LÝ 2: Reset CSS & Typography cơ bản */
+        * {
+            box-sizing: border-box; /* Đảm bảo kích thước không bị phình to khi thêm padding */
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex; /* Sử dụng Flexbox để chia màn hình làm 2 phần */
-            height: 100vh; /* Chiều cao bằng 100% màn hình hiển thị */
+            display: flex;
+            height: 100vh;
+            color: var(--text-main);
+            background-color: var(--main-bg);
+            line-height: 1.6;
         }
 
-        /* Phần Sidebar (Menu bên trái) */
+        /* --- THIẾT KẾ SIDEBAR --- */
         .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            color: white;
-            padding-top: 20px;
-            height: 100%;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            width: 260px;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
-        .sidebar h2 {
+        .sidebar-header {
+            padding: 30px 20px;
             text-align: center;
-            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .sidebar ul {
-            list-style-type: none; /* Bỏ dấu chấm tròn của danh sách */
+            list-style: none;
             padding: 0;
             margin: 0;
         }
 
+        /* NGUYÊN LÝ 3: Hiệu ứng chuyển tiếp (Transitions) tạo cảm giác mượt mà */
         .sidebar ul li {
-            padding: 10px 20px;
+            padding: 15px 25px;
             cursor: pointer;
-            border-bottom: 1px solid #34495e;
-            transition: background 0.3s;
+            border-left: 4px solid transparent; /* Chuẩn bị sẵn một viền tàng hình */
+            transition: all 0.3s ease;
+            font-weight: 400;
         }
 
         .sidebar ul li:hover {
-            background-color: #34495e;
+            background-color: rgba(255,255,255,0.05);
+            border-left: 4px solid var(--accent-color); /* Hiện viền xanh khi trỏ chuột */
+            padding-left: 30px; /* Đẩy chữ vào trong một chút */
         }
 
-        /* Danh sách con (Các option nhỏ) */
         .sub-menu {
-            display: none; /* Mặc định ẩn đi */
-            background-color: #1a252f;
+            display: none;
+            background-color: var(--secondary-bg);
         }
 
         .sub-menu li {
-            padding-left: 40px; /* Thụt lề để nhận diện là menu con */
-            font-size: 0.9em;
-            border-bottom: none;
+            padding: 12px 25px 12px 45px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
         }
 
-        /* Phần Nội dung chính bên phải */
+        /* --- THIẾT KẾ KHU VỰC NỘI DUNG CHÍNH --- */
         .main-content {
-            flex-grow: 1; /* Chiếm toàn bộ không gian còn lại */
-            padding: 40px;
-            background-color: #ecf0f1;
-            overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+            flex-grow: 1;
+            padding: 50px;
+            overflow-y: auto;
         }
 
-        /* Các phân vùng nội dung */
         .content-section {
-            display: none; /* Ẩn tất cả các phần nội dung lúc ban đầu */
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: none;
+            max-width: 900px;
+            margin: 0 auto; /* Căn giữa nội dung */
+            animation: fadeIn 0.4s ease-in-out; /* Gọi hiệu ứng mờ dần vào */
         }
 
-        /* Lớp này dùng để hiển thị phần nội dung đang được chọn */
         .content-section.active {
             display: block;
+        }
+
+        /* NGUYÊN LÝ 4: Thiết kế dạng Thẻ (Card Design) cho các Project */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hiệu ứng nổi lên khi trỏ chuột vào Card */
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .project-card h3 {
+            margin-top: 0;
+            color: var(--primary-bg);
+            font-size: 1.1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* NGUYÊN LÝ 5: Định nghĩa khung hình động (Keyframes) */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>Menu</h2>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>H & S Lab</h2>
+            <span style="font-size: 0.8rem; color: #94a3b8;">Research Portfolio</span>
+        </div>
         <ul>
             <li onclick="showSection('home')">Trang Chủ</li>
             
-            <li onclick="toggleSubMenu('hoang-menu')">Hoang Nguyen ▼</li>
+            <li onclick="toggleSubMenu('hoang-menu')">Hoang Nguyen ▾</li>
             <ul id="hoang-menu" class="sub-menu">
-                <li onclick="showSection('hoang-about')">Giới thiệu</li>
-                <li onclick="showSection('hoang-projects')">Projects</li>
+                <li onclick="showSection('hoang-about')">Hồ sơ năng lực</li>
+                <li onclick="showSection('hoang-projects')">Dự án Kỹ thuật</li>
             </ul>
 
-            <li onclick="toggleSubMenu('sang-menu')">Sang Truong ▼</li>
+            <li onclick="toggleSubMenu('sang-menu')">Sang Truong ▾</li>
             <ul id="sang-menu" class="sub-menu">
-                <li onclick="showSection('sang-about')">Giới thiệu</li>
-                <li onclick="showSection('sang-projects')">Projects</li>
+                <li onclick="showSection('sang-about')">Hồ sơ năng lực</li>
+                <li onclick="showSection('sang-projects')">Dự án Kỹ thuật</li>
             </ul>
 
-            <li onclick="showSection('contact')">Contact</li>
+            <li onclick="showSection('contact')">Liên Hệ</li>
         </ul>
-    </div>
+    </nav>
 
-    <div class="main-content">
+    <main class="main-content">
         
-        <div id="home" class="content-section active">
-            <h1>Chào mừng đến với không gian làm việc của chúng tôi</h1>
-            <p>Trang web này được xây dựng để lưu trữ và giới thiệu các dự án nghiên cứu, kỹ thuật và lập trình của Hoang Nguyen và Sang Truong.</p>
-            <p>Hãy sử dụng menu bên trái để điều hướng và khám phá chi tiết năng lực cũng như các dự án cụ thể của từng cá nhân.</p>
-        </div>
+        <section id="home" class="content-section active">
+            <h1 style="font-size: 2.5rem; color: #0f172a;">Tổng hợp dự án kỹ thuật</h1>
+            <p style="font-size: 1.1rem;">Chào mừng bạn đến với không gian lưu trữ mã nguồn, tài liệu thiết kế và kết quả phân tích của chúng tôi.</p>
+        </section>
 
-        <div id="hoang-about" class="content-section">
-            <h2>Giới thiệu: Hoang Nguyen</h2>
-            <p>Thông tin chi tiết về quá trình học tập, kỹ năng và định hướng phát triển của Hoang sẽ được cập nhật tại đây.</p>
-        </div>
-        <div id="hoang-projects" class="content-section">
-            <h2>Các dự án của Hoang</h2>
-            <ul>
-                <li><strong>Dự án 1:</strong> Mô phỏng vật lý...</li>
-                <li><strong>Dự án 2:</strong> Phân tích dữ liệu...</li>
-            </ul>
-        </div>
+        <section id="hoang-about" class="content-section">
+            <h2>Về Hoang Nguyen</h2>
+            <p>Tập trung vào phân tích hệ thống, mô hình hóa và xử lý tín hiệu.</p>
+        </section>
+        
+        <section id="hoang-projects" class="content-section">
+            <h2>Dự án tiêu biểu</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <span class="tag">OpenSCAD / 3D</span>
+                    <h3>Mô phỏng vật thể khối</h3>
+                    <p>Thiết kế và tùy chỉnh các linh kiện quang học. Tối ưu hóa cấu trúc hình học từ dạng cylinder sang cube để cải thiện hiệu suất thu thập ánh sáng.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">C++ / ROOT</span>
+                    <h3>Phân tích dữ liệu & Biểu đồ</h3>
+                    <p>Xây dựng hệ thống trích xuất dữ liệu mảng, vẽ các biểu đồ Histogram (h_sampic) và tinh chỉnh cấu trúc TLegend trong môi trường ROOT framework.</p>
+                </div>
+            </div>
+        </section>
 
-        <div id="sang-about" class="content-section">
-            <h2>Giới thiệu: Sang Truong</h2>
-            <p>Thông tin cá nhân, chuyên môn và nền tảng kỹ thuật của Sang.</p>
-        </div>
-        <div id="sang-projects" class="content-section">
-            <h2>Các dự án của Sang</h2>
-            <ul>
-                <li><strong>Dự án A:</strong> Lập trình hệ thống...</li>
-                <li><strong>Dự án B:</strong> Thiết kế mô hình...</li>
-            </ul>
-        </div>
+        <section id="sang-about" class="content-section">
+            <h2>Về Sang Truong</h2>
+            <p>Phát triển phần cứng, tích hợp hệ thống và thuật toán học máy.</p>
+        </section>
 
-        <div id="contact" class="content-section">
-            <h2>Liên hệ với chúng tôi</h2>
-            <p>Email: example@email.com</p>
-            <p>GitHub: github.com/your-username</p>
-        </div>
+        <section id="sang-projects" class="content-section">
+            <h2>Dự án tiêu biểu</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <span class="tag">Electronics</span>
+                    <h3>Phân tích mạch & Linh kiện thụ động</h3>
+                    <p>Nghiên cứu sâu về nguyên lý hoạt động và sự kết hợp của các linh kiện điện tử cơ bản trước khi tiến lên các vi điều khiển phức tạp.</p>
+                </div>
+                <div class="project-card">
+                    <span class="tag">Machine Learning</span>
+                    <h3>Kiến trúc Mạng Nơ-ron</h3>
+                    <p>Phân tích cấu trúc các hidden layer, hàm kích hoạt và thử nghiệm các mô hình học có giám sát (Supervised Learning).</p>
+                </div>
+            </div>
+        </section>
 
-    </div>
+        <section id="contact" class="content-section">
+            <h2>Trao đổi kỹ thuật</h2>
+            <p>Mọi mã nguồn đóng góp và báo cáo lỗi vui lòng thực hiện qua Pull Request trên GitHub.</p>
+        </section>
+
+    </main>
 
     <script>
-        // Nguyên lý 1: Đóng/mở menu con
         function toggleSubMenu(menuId) {
-            // Tìm thẻ <ul> có ID tương ứng
             var menu = document.getElementById(menuId);
-            // Kiểm tra trạng thái hiện tại. Nếu đang ẩn (none) hoặc rỗng thì mở ra (block), ngược lại thì ẩn đi
             if (menu.style.display === "block") {
                 menu.style.display = "none";
             } else {
@@ -157,17 +246,11 @@
             }
         }
 
-        // Nguyên lý 2: Chuyển đổi vùng nội dung hiển thị
         function showSection(sectionId) {
-            // Bước 1: Tìm tất cả các thẻ có class là 'content-section'
             var sections = document.getElementsByClassName('content-section');
-            
-            // Bước 2: Dùng vòng lặp duyệt qua tất cả và xóa class 'active' (ẩn chúng đi)
             for (var i = 0; i < sections.length; i++) {
                 sections[i].classList.remove('active');
             }
-            
-            // Bước 3: Tìm đúng vùng nội dung được yêu cầu và thêm class 'active' (hiển thị lên)
             document.getElementById(sectionId).classList.add('active');
         }
     </script>
