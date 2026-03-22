@@ -3,58 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> SH Lab — Research Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <title>H & S Lab — Research Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg0:       #0b1a26;
-            --bg1:       #13293d;
-            --bg2:       #1a3450;
-            --bg3:       #1f3d5c;
-            --border:    rgba(255,255,255,0.06);
-            --border2:   rgba(255,255,255,0.12);
-            --text:      #d4dde6;
-            --text-dim:  #6a8599;
-            --text-mute: #334d61;
-            --accent:    #4a9ebb;
-            --accent-dim:rgba(74,158,187,0.12);
-            --accent-glow:rgba(74,158,187,0.25);
-            --sidebar-w: 256px;
-            --radius:    8px;
+            --bg:        #f0f4f8;
+            --surface:   #ffffff;
+            --surface2:  #e8eef4;
+            --sidebar-bg:#1a3a52;
+            --sidebar-s: #142d40;
+            --border:    #dde4ec;
+            --text:      #1e2d3d;
+            --text-mid:  #4a6278;
+            --text-soft: #8da4b8;
+            --accent:    #2277aa;
+            --accent-bg: #e8f3fb;
+            --accent-br: #b8d8ee;
+            --green:     #2a9d6a;
+            --radius:    10px;
+            --sidebar-w: 240px;
             --mono: 'JetBrains Mono', monospace;
             --sans: 'Nunito', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::selection { background: var(--accent); color: #fff; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
 
         body {
             font-family: var(--sans);
-            background: var(--bg0);
+            background: var(--bg);
             color: var(--text);
             display: flex;
             height: 100vh;
             overflow: hidden;
-            font-size: 15px;
         }
 
-        /* ═══ SIDEBAR ═══ */
+        /* ── SIDEBAR ── */
         .sidebar {
             width: var(--sidebar-w);
             min-width: var(--sidebar-w);
-            background: var(--bg1);
-            border-right: 1px solid var(--border);
+            background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             z-index: 20;
         }
 
-        .sidebar-brand {
-            padding: 28px 22px 22px;
-            border-bottom: 1px solid var(--border);
+        .brand {
+            padding: 30px 20px 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
 
         .brand-name {
@@ -64,191 +63,180 @@
             color: #fff;
             letter-spacing: -0.01em;
         }
-        .brand-name span { color: var(--accent); }
 
-        .brand-sub {
+        .brand-name span { color: #6ab4e0; }
+
+        .brand-tagline {
             font-family: var(--mono);
             font-size: 0.6rem;
-            color: var(--text-mute);
-            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.3);
             margin-top: 5px;
+            letter-spacing: 0.05em;
         }
 
-        .nav-group { padding: 18px 0 4px; }
+        .nav-section {
+            padding: 14px 0 8px;
+        }
 
-        .nav-group-label {
+        .nav-label {
             font-family: var(--mono);
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--text-mute);
-            padding: 0 22px 8px;
+            color: rgba(255,255,255,0.22);
+            padding: 0 20px 6px;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
             gap: 9px;
-            padding: 9px 22px;
+            padding: 9px 20px;
             cursor: pointer;
-            font-family: var(--sans);
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             font-weight: 600;
-            color: var(--text-dim);
+            color: rgba(255,255,255,0.52);
             border-left: 2px solid transparent;
-            transition: color 0.18s, background 0.18s, border-color 0.18s;
+            transition: color 0.16s, background 0.16s, border-color 0.16s;
             user-select: none;
         }
 
-        .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-        .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-dim); }
-
-        .nav-dot {
-            width: 5px; height: 5px;
-            border-radius: 50%;
-            background: var(--text-mute);
-            flex-shrink: 0;
-            transition: background 0.18s;
+        .nav-item:hover {
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.05);
         }
-        .nav-item:hover .nav-dot, .nav-item.active .nav-dot { background: var(--accent); }
 
-        .nav-arrow {
+        .nav-item.active {
+            color: #fff;
+            border-left-color: #6ab4e0;
+            background: rgba(106,180,224,0.1);
+        }
+
+        .nav-chevron {
             margin-left: auto;
-            font-size: 0.6rem;
-            color: var(--text-mute);
-            transition: transform 0.25s ease;
-            font-family: var(--mono);
+            font-size: 0.55rem;
+            opacity: 0.4;
+            transition: transform 0.22s ease;
         }
-        .nav-item.open .nav-arrow { transform: rotate(90deg); }
+
+        .nav-item.open .nav-chevron { transform: rotate(90deg); }
 
         .nav-sub {
             overflow: hidden;
             max-height: 0;
-            transition: max-height 0.3s ease;
-            background: rgba(0,0,0,0.12);
+            transition: max-height 0.28s ease;
         }
-        .nav-sub.open { max-height: 200px; }
+
+        .nav-sub.open { max-height: 180px; }
 
         .nav-sub-item {
             display: flex;
             align-items: center;
-            gap: 9px;
-            padding: 7px 22px 7px 38px;
+            padding: 7px 20px 7px 36px;
             cursor: pointer;
             font-family: var(--mono);
             font-size: 0.72rem;
-            color: var(--text-mute);
+            color: rgba(255,255,255,0.32);
             border-left: 2px solid transparent;
-            transition: color 0.15s, border-color 0.15s;
+            transition: color 0.14s, border-color 0.14s;
         }
-        .nav-sub-item:hover { color: var(--text-dim); }
-        .nav-sub-item.active { color: var(--accent); border-left-color: var(--accent); }
+
+        .nav-sub-item:hover { color: rgba(255,255,255,0.65); }
+
+        .nav-sub-item.active {
+            color: #6ab4e0;
+            border-left-color: #6ab4e0;
+        }
 
         .sidebar-foot {
             margin-top: auto;
-            padding: 16px 22px;
-            border-top: 1px solid var(--border);
-        }
-
-        .status-line {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255,255,255,0.07);
             display: flex;
             align-items: center;
             gap: 7px;
             font-family: var(--mono);
-            font-size: 0.62rem;
-            color: var(--text-mute);
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.22);
         }
 
-        .status-dot {
+        .live-dot {
             width: 5px; height: 5px;
             border-radius: 50%;
             background: #3dbb78;
-            animation: blink 2.4s ease infinite;
+            animation: blink 2.5s ease infinite;
         }
 
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-        /* ═══ MAIN ═══ */
+        /* ── MAIN ── */
         .main {
             flex: 1;
             overflow-y: auto;
-            background: var(--bg0);
-            position: relative;
-        }
-
-        .main::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(74,158,187,0.055) 1px, transparent 1px);
-            background-size: 32px 32px;
-            pointer-events: none;
-            z-index: 0;
+            background: var(--bg);
         }
 
         .page {
             display: none;
-            padding: 52px 60px 80px;
-            max-width: 920px;
-            position: relative;
-            z-index: 1;
-            animation: pageIn 0.3s ease;
+            padding: 52px 56px 80px;
+            max-width: 880px;
+            animation: fadeUp 0.28s ease;
         }
+
         .page.active { display: block; }
 
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(14px); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ─── Typography ─── */
-        .eyebrow {
+        /* ── Typography ── */
+        .kicker {
             font-family: var(--mono);
             font-size: 0.62rem;
-            letter-spacing: 0.14em;
+            font-weight: 400;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .page-title {
-            font-family: var(--sans);
-            font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
             font-weight: 800;
             letter-spacing: -0.025em;
             line-height: 1.15;
-            color: #e8f0f7;
+            color: var(--text);
             margin-bottom: 14px;
         }
-        .page-title em { font-style: normal; color: var(--accent); }
 
-        .page-lead {
+        .page-title em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .page-desc {
             font-size: 0.93rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-            max-width: 560px;
-            margin-bottom: 44px;
             font-weight: 400;
+            color: var(--text-mid);
+            line-height: 1.8;
+            max-width: 540px;
+            margin-bottom: 44px;
         }
 
-        /* ─── Row rule ─── */
-        .row-rule {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .row-rule-label {
+        /* ── Divider label ── */
+        .section-label {
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--text-mute);
-            white-space: nowrap;
+            color: var(--text-soft);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
         }
-        .row-rule-line { flex: 1; height: 1px; background: var(--border); }
 
-        /* ─── Stats ─── */
+        /* ── Stats ── */
         .stat-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -257,180 +245,186 @@
         }
 
         .stat-box {
-            background: var(--bg1);
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 22px 20px;
-            transition: border-color 0.2s;
+            transition: box-shadow 0.18s;
         }
-        .stat-box:hover { border-color: var(--border2); }
+
+        .stat-box:hover {
+            box-shadow: 0 4px 16px rgba(34,119,170,0.08);
+        }
 
         .stat-num {
             font-family: var(--mono);
-            font-size: 1.7rem;
+            font-size: 1.75rem;
             font-weight: 500;
             color: var(--accent);
             letter-spacing: -0.03em;
         }
-        .stat-label {
-            font-family: var(--mono);
-            font-size: 0.62rem;
-            color: var(--text-mute);
-            margin-top: 5px;
-            letter-spacing: 0.06em;
+
+        .stat-lbl {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-soft);
+            margin-top: 4px;
         }
 
-        /* ─── Timeline ─── */
+        /* ── Timeline ── */
         .timeline { display: flex; flex-direction: column; }
 
         .tl-item {
             display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 20px;
+            grid-template-columns: 76px 1fr;
+            gap: 18px;
             padding: 16px 0;
             border-bottom: 1px solid var(--border);
         }
+
         .tl-item:last-child { border-bottom: none; }
 
         .tl-date {
             font-family: var(--mono);
             font-size: 0.65rem;
-            color: var(--text-mute);
+            color: var(--text-soft);
             padding-top: 2px;
         }
-        .tl-body h4 {
-            font-family: var(--sans);
+
+        .tl-title {
             font-size: 0.88rem;
             font-weight: 700;
             color: var(--text);
             margin-bottom: 3px;
         }
-        .tl-body p {
+
+        .tl-desc {
             font-size: 0.82rem;
-            color: var(--text-dim);
+            color: var(--text-mid);
             line-height: 1.65;
         }
 
-        /* ─── Profile ─── */
+        /* ── Profile ── */
         .profile-header {
             display: flex;
             align-items: flex-start;
-            gap: 28px;
-            margin-bottom: 36px;
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
         .avatar {
-            width: 72px; height: 72px;
+            width: 68px; height: 68px;
             border-radius: var(--radius);
-            background: var(--bg2);
-            border: 1px solid var(--border2);
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-br);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--mono);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             color: var(--accent);
             flex-shrink: 0;
-            letter-spacing: 0.05em;
         }
 
         .profile-name {
-            font-family: var(--sans);
-            font-size: 1.6rem;
+            font-size: 1.55rem;
             font-weight: 800;
-            color: #e8f0f7;
+            color: var(--text);
             letter-spacing: -0.02em;
         }
+
         .profile-role {
             font-family: var(--mono);
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--accent);
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
             margin-top: 5px;
         }
+
         .profile-bio {
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 0.85rem;
-            color: var(--text-dim);
+            color: var(--text-mid);
             line-height: 1.75;
         }
 
-        /* ─── Skills ─── */
-        .skills-wrap {
+        /* ── Skill tags ── */
+        .skills {
             display: flex;
             flex-wrap: wrap;
             gap: 7px;
-            margin-bottom: 36px;
+            margin-bottom: 32px;
         }
 
         .skill {
             font-family: var(--mono);
             font-size: 0.68rem;
             padding: 4px 10px;
-            border-radius: 4px;
-            border: 1px solid var(--border2);
-            color: var(--text-dim);
-            background: var(--bg1);
-            transition: border-color 0.15s, color 0.15s;
-            letter-spacing: 0.03em;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            color: var(--text-mid);
+            background: var(--surface);
+            transition: border-color 0.14s, color 0.14s;
         }
-        .skill:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* ─── Cards ─── */
-        .cards-grid {
+        .skill:hover {
+            border-color: var(--accent-br);
+            color: var(--accent);
+        }
+
+        /* ── Project cards ── */
+        .cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
             gap: 14px;
         }
 
         .card {
-            background: var(--bg1);
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px 22px 18px;
-            cursor: pointer;
-            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.35), 0 0 0 1px var(--accent-glow);
+            padding: 24px 22px 20px;
+            transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+            cursor: default;
         }
 
-        .card-lang {
+        .card:hover {
+            border-color: var(--accent-br);
+            box-shadow: 0 6px 24px rgba(34,119,170,0.09);
+            transform: translateY(-2px);
+        }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             font-family: var(--mono);
             font-size: 0.6rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.08em;
             color: var(--accent);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .card-lang::before {
-            content: '';
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            opacity: 0.7;
-            display: inline-block;
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-br);
+            border-radius: 4px;
+            padding: 3px 8px;
+            margin-bottom: 12px;
         }
 
         .card-title {
-            font-family: var(--sans);
             font-size: 0.92rem;
             font-weight: 700;
-            color: #e8f0f7;
+            color: var(--text);
             margin-bottom: 8px;
             line-height: 1.4;
         }
+
         .card-desc {
-            font-size: 0.8rem;
-            color: var(--text-dim);
+            font-size: 0.81rem;
+            color: var(--text-mid);
             line-height: 1.7;
         }
+
         .card-footer {
             display: flex;
             align-items: center;
@@ -439,142 +433,220 @@
             padding-top: 14px;
             border-top: 1px solid var(--border);
         }
-        .card-meta { font-family: var(--mono); font-size: 0.6rem; color: var(--text-mute); }
-        .card-link { font-family: var(--mono); font-size: 0.62rem; color: var(--text-mute); transition: color 0.15s; }
-        .card:hover .card-link { color: var(--accent); }
 
-        /* ─── Upload ─── */
-        .upload-zone {
-            border: 1px dashed var(--border2);
-            border-radius: var(--radius);
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            background: var(--bg1);
-            position: relative;
-            margin-bottom: 16px;
-        }
-        .upload-zone:hover, .upload-zone.drag-over {
-            border-color: var(--accent);
-            background: var(--accent-dim);
-        }
-        .upload-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-        .upload-ico { font-family: var(--mono); font-size: 1.4rem; color: var(--text-mute); margin-bottom: 10px; }
-        .upload-title { font-family: var(--sans); font-size: 0.88rem; font-weight: 700; color: var(--text); }
-        .upload-hint { font-family: var(--mono); font-size: 0.6rem; color: var(--text-mute); margin-top: 5px; letter-spacing: 0.06em; }
-
-        /* ─── File list ─── */
-        .file-list { display: flex; flex-direction: column; gap: 6px; }
-
-        .file-item {
+        .card-status {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: var(--bg1);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 10px 14px;
+            gap: 5px;
             font-family: var(--mono);
-            font-size: 0.72rem;
-            animation: pageIn 0.2s ease;
+            font-size: 0.6rem;
+            color: var(--text-soft);
         }
-        .file-ico { color: var(--accent); }
-        .file-name { flex: 1; color: var(--text); }
-        .file-sz { color: var(--text-mute); font-size: 0.62rem; }
-        .file-rm {
-            background: none; border: none;
-            color: var(--text-mute); cursor: pointer;
-            font-size: 0.75rem; padding: 0;
-            transition: color 0.15s;
-            font-family: var(--mono);
-        }
-        .file-rm:hover { color: #c0392b; }
 
-        /* ─── Gallery ─── */
-        .gallery-grid {
+        .dot-status {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+        }
+
+        .dot-active { background: var(--green); }
+        .dot-done   { background: var(--text-soft); }
+
+        .card-year {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            color: var(--text-soft);
+        }
+
+        /* ── File list (read-only, managed via git) ── */
+        .file-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: border-color 0.14s;
+        }
+
+        .file-row:hover { border-color: var(--accent-br); }
+
+        .file-type {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            padding: 3px 7px;
+            border-radius: 4px;
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-br);
+            color: var(--accent);
+            flex-shrink: 0;
+            min-width: 44px;
+            text-align: center;
+        }
+
+        .file-name {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .file-desc {
+            font-size: 0.78rem;
+            color: var(--text-mid);
+        }
+
+        .file-link {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 4px 10px;
+            border: 1px solid var(--accent-br);
+            border-radius: 5px;
+            background: var(--accent-bg);
+            transition: background 0.14s;
+            white-space: nowrap;
+        }
+
+        .file-link:hover { background: var(--accent-br); }
+
+        /* ── Gallery ── */
+        .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 10px;
-            margin-top: 14px;
         }
+
         .gal-item {
             aspect-ratio: 4/3;
-            border-radius: 6px;
-            background: var(--bg1);
+            border-radius: 8px;
+            background: var(--surface2);
             border: 1px solid var(--border);
             overflow: hidden;
             cursor: pointer;
-            transition: border-color 0.2s, transform 0.2s;
+            transition: border-color 0.16s, transform 0.16s;
+        }
+
+        .gal-item:hover {
+            border-color: var(--accent-br);
+            transform: scale(1.02);
+        }
+
+        .gal-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .gal-placeholder {
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--mono);
-            font-size: 0.62rem;
-            color: var(--text-mute);
+            font-size: 0.65rem;
+            color: var(--text-soft);
+            background: var(--surface2);
+            text-align: center;
+            padding: 8px;
+            line-height: 1.5;
         }
-        .gal-item:hover { border-color: var(--accent); transform: scale(1.02); }
-        .gal-item img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ─── Contact ─── */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* ── Contact ── */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
 
-        .contact-item {
-            background: var(--bg1);
+        .contact-card {
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 18px 20px;
             display: flex;
             align-items: center;
             gap: 14px;
-            transition: border-color 0.18s;
-            cursor: pointer;
+            transition: border-color 0.16s, box-shadow 0.16s;
+            cursor: default;
         }
-        .contact-item:hover { border-color: var(--accent); }
+
+        .contact-card:hover {
+            border-color: var(--accent-br);
+            box-shadow: 0 4px 14px rgba(34,119,170,0.07);
+        }
 
         .contact-ico {
-            font-family: var(--mono);
-            font-size: 0.72rem;
-            color: var(--accent);
-            width: 34px; height: 34px;
-            background: var(--accent-dim);
-            border-radius: 6px;
+            width: 36px; height: 36px;
+            background: var(--accent-bg);
+            border: 1px solid var(--accent-br);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--accent);
             flex-shrink: 0;
         }
-        .contact-key { font-family: var(--mono); font-size: 0.58rem; color: var(--text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
-        .contact-val { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; color: var(--text); margin-top: 2px; }
 
-        /* ─── Mobile ─── */
-        .mob-toggle {
+        .contact-lbl {
+            font-family: var(--mono);
+            font-size: 0.58rem;
+            color: var(--text-soft);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .contact-val {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 2px;
+        }
+
+        /* ── Notice banner ── */
+        .notice {
+            background: #fffbeb;
+            border: 1px solid #f0d070;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 0.82rem;
+            color: #7a5a10;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.6;
+        }
+
+        .notice-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+
+        /* ── Mobile ── */
+        .mob-btn {
             display: none;
             position: fixed;
             top: 14px; left: 14px;
             z-index: 100;
-            background: var(--bg1);
-            border: 1px solid var(--border2);
-            border-radius: 6px;
-            padding: 7px 11px;
+            background: var(--sidebar-bg);
+            border: none;
+            border-radius: 7px;
+            padding: 8px 13px;
             cursor: pointer;
             font-family: var(--mono);
-            font-size: 0.75rem;
-            color: var(--text-dim);
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.7);
         }
 
-        @media (max-width: 720px) {
-            .mob-toggle { display: block; }
-            .sidebar { position: fixed; left: -260px; top: 0; bottom: 0; transition: left 0.28s ease; }
+        @media (max-width: 700px) {
+            .mob-btn { display: block; }
+            .sidebar { position: fixed; left: -244px; top: 0; bottom: 0; transition: left 0.26s ease; }
             .sidebar.open { left: 0; }
-            .page { padding: 72px 22px 60px; }
+            .page { padding: 72px 20px 60px; }
             .stat-row { grid-template-columns: 1fr 1fr; }
             .contact-grid { grid-template-columns: 1fr; }
             .profile-header { flex-direction: column; }
@@ -583,126 +655,115 @@
 </head>
 <body>
 
-<button class="mob-toggle" onclick="toggleSidebar()">menu</button>
+<button class="mob-btn" onclick="toggleMob()">menu</button>
 
-<!-- ═══ SIDEBAR ═══ -->
+<!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
+    <div class="brand">
         <div class="brand-name">H <span>&</span> S Lab</div>
-        <div class="brand-sub">// research portfolio</div>
+        <div class="brand-tagline">research portfolio</div>
     </div>
 
-    <div class="nav-group">
-        <div class="nav-group-label">Navigation</div>
+    <div class="nav-section">
+        <div class="nav-label">Menu</div>
 
-        <div class="nav-item active" onclick="showPage('home', this)">
-            <span class="nav-dot"></span> Home
-        </div>
-
-        <div class="nav-item" onclick="toggleSub('sub-hoang', this)">
-            <span class="nav-dot"></span> hoangvie
-            <span class="nav-arrow">▶</span>
-        </div>
-        <div class="nav-sub" id="sub-hoang">
-            <div class="nav-sub-item" onclick="showPage('hoang-about', this)">profile.md</div>
-            <div class="nav-sub-item" onclick="showPage('hoang-projects', this)">projects/</div>
-            <div class="nav-sub-item" onclick="showPage('hoang-files', this)">files/</div>
+        <div class="nav-item active" onclick="go('home', this)">
+            Home
         </div>
 
-        <div class="nav-item" onclick="toggleSub('sub-sang', this)">
-            <span class="nav-dot"></span> Sang Truong
-            <span class="nav-arrow">▶</span>
+        <div class="nav-item" onclick="toggleSub('sub-h', this)">
+            Hoang Nguyen
+            <span class="nav-chevron">▶</span>
         </div>
-        <div class="nav-sub" id="sub-sang">
-            <div class="nav-sub-item" onclick="showPage('sang-about', this)">profile.md</div>
-            <div class="nav-sub-item" onclick="showPage('sang-projects', this)">projects/</div>
-            <div class="nav-sub-item" onclick="showPage('sang-files', this)">files/</div>
-        </div>
-
-        <div class="nav-item" onclick="showPage('gallery', this)">
-            <span class="nav-dot"></span> Gallery
+        <div class="nav-sub" id="sub-h">
+            <div class="nav-sub-item" onclick="go('h-profile', this)">Profile</div>
+            <div class="nav-sub-item" onclick="go('h-projects', this)">Projects</div>
+            <div class="nav-sub-item" onclick="go('h-files', this)">Files</div>
         </div>
 
-        <div class="nav-item" onclick="showPage('contact', this)">
-            <span class="nav-dot"></span> Contact
+        <div class="nav-item" onclick="toggleSub('sub-s', this)">
+            Sang Truong
+            <span class="nav-chevron">▶</span>
         </div>
+        <div class="nav-sub" id="sub-s">
+            <div class="nav-sub-item" onclick="go('s-profile', this)">Profile</div>
+            <div class="nav-sub-item" onclick="go('s-projects', this)">Projects</div>
+            <div class="nav-sub-item" onclick="go('s-files', this)">Files</div>
+        </div>
+
+        <div class="nav-item" onclick="go('gallery', this)">Gallery</div>
+        <div class="nav-item" onclick="go('contact', this)">Contact</div>
     </div>
 
     <div class="sidebar-foot">
-        <div class="status-line">
-            <span class="status-dot"></span>
-            GitHub Pages · live
-        </div>
+        <span class="live-dot"></span> GitHub Pages
     </div>
 </nav>
 
-<!-- ═══ MAIN ═══ -->
+<!-- MAIN -->
 <main class="main">
 
     <!-- HOME -->
     <section id="home" class="page active">
-        <div class="eyebrow">// welcome</div>
+        <div class="kicker">Welcome</div>
         <h1 class="page-title">H & S <em>Research</em><br>Laboratory</h1>
-        <p class="page-lead">Source code, design documents, experimental results and technical projects by Hoang Nguyen & Sang Truong — published openly via GitHub Pages.</p>
+        <p class="page-desc">A public archive of source code, design documents and experimental results by Hoang Nguyen & Sang Truong.</p>
 
         <div class="stat-row">
             <div class="stat-box">
                 <div class="stat-num">04</div>
-                <div class="stat-label">// projects</div>
+                <div class="stat-lbl">Projects</div>
             </div>
             <div class="stat-box">
                 <div class="stat-num">02</div>
-                <div class="stat-label">// members</div>
+                <div class="stat-lbl">Members</div>
             </div>
             <div class="stat-box">
                 <div class="stat-num">2025</div>
-                <div class="stat-label">// active</div>
+                <div class="stat-lbl">Active since</div>
             </div>
         </div>
 
-        <div class="row-rule">
-            <span class="row-rule-label">Recent activity</span>
-            <span class="row-rule-line"></span>
-        </div>
+        <div class="section-label">Recent activity</div>
         <div class="timeline">
             <div class="tl-item">
-                <div class="tl-date">2025-06</div>
-                <div class="tl-body">
-                    <h4>OpenSCAD geometry refactor</h4>
-                    <p>Migrated optical component model from cylinder to cube geometry. Improved light capture efficiency.</p>
+                <div class="tl-date">Jun 2025</div>
+                <div>
+                    <div class="tl-title">OpenSCAD geometry refactor</div>
+                    <div class="tl-desc">Migrated optical component model from cylinder to cube geometry. Improved light capture efficiency.</div>
                 </div>
             </div>
             <div class="tl-item">
-                <div class="tl-date">2025-05</div>
-                <div class="tl-body">
-                    <h4>Neural network architecture trials</h4>
-                    <p>Tested 3 hidden-layer configurations with supervised dataset. Benchmarking activation functions.</p>
+                <div class="tl-date">May 2025</div>
+                <div>
+                    <div class="tl-title">Neural network architecture trials</div>
+                    <div class="tl-desc">Tested 3 hidden-layer configurations with supervised dataset. Benchmarking activation functions.</div>
                 </div>
             </div>
             <div class="tl-item">
-                <div class="tl-date">2025-04</div>
-                <div class="tl-body">
-                    <h4>ROOT histogram pipeline</h4>
-                    <p>Completed h_sampic extraction and multi-layer histogram rendering with custom TLegend.</p>
+                <div class="tl-date">Apr 2025</div>
+                <div>
+                    <div class="tl-title">ROOT histogram pipeline complete</div>
+                    <div class="tl-desc">Completed h_sampic extraction and multi-layer histogram rendering with custom TLegend.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- HOANG PROFILE -->
-    <section id="hoang-about" class="page">
-        <div class="eyebrow">// profile.md</div>
+    <section id="h-profile" class="page">
+        <div class="kicker">Member profile</div>
         <div class="profile-header">
             <div class="avatar">HN</div>
             <div>
                 <div class="profile-name">Hoang Nguyen</div>
-                <div class="profile-role">// signal processing · data analysis · 3d modelling</div>
-                <p class="profile-bio">Focused on system analysis, geometric modelling and physical signal processing. Primary interests: optical component optimisation and experimental data visualisation inside the ROOT/C++ ecosystem.</p>
+                <div class="profile-role">Signal Processing · Data Analysis · 3D Modelling</div>
+                <div class="profile-bio">Focused on system analysis, geometric modelling and physical signal processing. Primary interests: optical component optimisation and experimental data visualisation in the ROOT / C++ ecosystem.</div>
             </div>
         </div>
 
-        <div class="row-rule"><span class="row-rule-label">Skills</span><span class="row-rule-line"></span></div>
-        <div class="skills-wrap">
+        <div class="section-label">Skills</div>
+        <div class="skills">
             <span class="skill">C++</span>
             <span class="skill">ROOT Framework</span>
             <span class="skill">OpenSCAD</span>
@@ -713,83 +774,101 @@
             <span class="skill">Data Visualisation</span>
         </div>
 
-        <div class="row-rule"><span class="row-rule-label">Timeline</span><span class="row-rule-line"></span></div>
+        <div class="section-label">Timeline</div>
         <div class="timeline">
             <div class="tl-item">
                 <div class="tl-date">2025</div>
-                <div class="tl-body">
-                    <h4>Optical geometry optimisation</h4>
-                    <p>Redesigned scintillator housing in OpenSCAD. +18% light collection estimated via simulation.</p>
+                <div>
+                    <div class="tl-title">Optical geometry optimisation</div>
+                    <div class="tl-desc">Redesigned scintillator housing in OpenSCAD. Estimated +18% light collection improvement.</div>
                 </div>
             </div>
             <div class="tl-item">
                 <div class="tl-date">2024</div>
-                <div class="tl-body">
-                    <h4>ROOT analysis pipeline</h4>
-                    <p>Automated array data extraction, multi-histogram rendering, and legend customisation.</p>
+                <div>
+                    <div class="tl-title">ROOT analysis pipeline</div>
+                    <div class="tl-desc">Automated array data extraction, multi-histogram rendering and legend customisation.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- HOANG PROJECTS -->
-    <section id="hoang-projects" class="page">
-        <div class="eyebrow">// projects/</div>
+    <section id="h-projects" class="page">
+        <div class="kicker">Hoang Nguyen</div>
         <h1 class="page-title">Engineering<br><em>Projects</em></h1>
-        <p class="page-lead">Hoang Nguyen — individual research and applied engineering work.</p>
+        <p class="page-desc">Individual research and applied engineering work.</p>
 
-        <div class="cards-grid">
+        <div class="cards">
             <div class="card">
-                <div class="card-lang">OpenSCAD · 3D</div>
+                <div class="card-tag">OpenSCAD · 3D</div>
                 <div class="card-title">Optical component simulation</div>
-                <p class="card-desc">Custom geometry design for light-collecting components. Transition from cylinder to cube form to improve solid-angle coverage.</p>
+                <div class="card-desc">Custom geometry design for light-collecting components. Transition from cylinder to cube form to improve solid-angle coverage and fabrication ease.</div>
                 <div class="card-footer">
-                    <span class="card-meta">2025 · in progress</span>
-                    <span class="card-link">view →</span>
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-lang">C++ · ROOT</div>
+                <div class="card-tag">C++ · ROOT</div>
                 <div class="card-title">Data analysis & histogramming</div>
-                <p class="card-desc">Array data extraction pipeline, h_sampic histogram generation and TLegend refinement inside the ROOT framework for physics experiments.</p>
+                <div class="card-desc">Array data extraction pipeline, h_sampic histogram generation and TLegend refinement inside ROOT framework for physics experiments.</div>
                 <div class="card-footer">
-                    <span class="card-meta">2024 · completed</span>
-                    <span class="card-link">view →</span>
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- HOANG FILES -->
-    <section id="hoang-files" class="page">
-        <div class="eyebrow">// files/</div>
+    <section id="h-files" class="page">
+        <div class="kicker">Hoang Nguyen</div>
         <h1 class="page-title">Documents &<br><em>Source Code</em></h1>
-        <p class="page-lead">Upload code files, PDF reports or experimental result images for Hoang Nguyen.</p>
+        <p class="page-desc">Files are managed via the GitHub repository. Click any entry to view or download.</p>
 
-        <div class="row-rule"><span class="row-rule-label">Upload</span><span class="row-rule-line"></span></div>
-        <div class="upload-zone" id="hz-zone">
-            <input type="file" multiple accept=".cpp,.h,.py,.scad,.pdf,.png,.jpg,.txt,.md,.root" onchange="handleFiles(this.files,'hz-list')">
-            <div class="upload-ico">↑</div>
-            <div class="upload-title">Drop files or click to select</div>
-            <div class="upload-hint">.cpp · .h · .py · .scad · .pdf · .png · .jpg · .md · .root</div>
+        <div class="notice">
+            <span class="notice-icon">ℹ</span>
+            Files are added by pushing to the repository. To contribute, open a Pull Request on GitHub.
         </div>
-        <div class="file-list" id="hz-list"></div>
+
+        <div class="section-label">Available files</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.scad</span>
+                <span class="file-name">optical_housing_v2.scad</span>
+                <span class="file-desc">Cube geometry — scintillator housing</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.cpp</span>
+                <span class="file-name">histogram_pipeline.cpp</span>
+                <span class="file-desc">h_sampic extraction & ROOT render</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.pdf</span>
+                <span class="file-name">analysis_report_2024.pdf</span>
+                <span class="file-desc">Experimental results summary</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
     </section>
 
     <!-- SANG PROFILE -->
-    <section id="sang-about" class="page">
-        <div class="eyebrow">// profile.md</div>
+    <section id="s-profile" class="page">
+        <div class="kicker">Member profile</div>
         <div class="profile-header">
             <div class="avatar">ST</div>
             <div>
                 <div class="profile-name">Sang Truong</div>
-                <div class="profile-role">// hardware design · ml architecture · embedded systems</div>
-                <p class="profile-bio">Hardware development from passive components up to microcontrollers, combined with neural network design and training. Interested in the intersection of embedded hardware and machine intelligence.</p>
+                <div class="profile-role">Hardware Design · ML Architecture · Embedded Systems</div>
+                <div class="profile-bio">Hardware development from passive components to microcontrollers, combined with neural network design and training. Interested in the intersection of embedded hardware and machine intelligence.</div>
             </div>
         </div>
 
-        <div class="row-rule"><span class="row-rule-label">Skills</span><span class="row-rule-line"></span></div>
-        <div class="skills-wrap">
+        <div class="section-label">Skills</div>
+        <div class="skills">
             <span class="skill">Electronics</span>
             <span class="skill">Arduino / ESP32</span>
             <span class="skill">Python</span>
@@ -800,122 +879,135 @@
             <span class="skill">Embedded Systems</span>
         </div>
 
-        <div class="row-rule"><span class="row-rule-label">Timeline</span><span class="row-rule-line"></span></div>
+        <div class="section-label">Timeline</div>
         <div class="timeline">
             <div class="tl-item">
                 <div class="tl-date">2025</div>
-                <div class="tl-body">
-                    <h4>Multi-layer neural network experiments</h4>
-                    <p>Testing hidden-layer configurations and activation functions for classification problems.</p>
+                <div>
+                    <div class="tl-title">Multi-layer neural network experiments</div>
+                    <div class="tl-desc">Testing hidden-layer configurations and activation functions for classification tasks.</div>
                 </div>
             </div>
             <div class="tl-item">
                 <div class="tl-date">2024</div>
-                <div class="tl-body">
-                    <h4>Passive component fundamentals</h4>
-                    <p>In-depth analysis of R, L, C behaviour and filter circuits before advancing to MCU integration.</p>
+                <div>
+                    <div class="tl-title">Passive component fundamentals</div>
+                    <div class="tl-desc">In-depth study of R, L, C behaviour and filter circuits before advancing to MCU integration.</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- SANG PROJECTS -->
-    <section id="sang-projects" class="page">
-        <div class="eyebrow">// projects/</div>
+    <section id="s-projects" class="page">
+        <div class="kicker">Sang Truong</div>
         <h1 class="page-title">Engineering<br><em>Projects</em></h1>
-        <p class="page-lead">Sang Truong — individual research and applied engineering work.</p>
+        <p class="page-desc">Individual research and applied engineering work.</p>
 
-        <div class="cards-grid">
+        <div class="cards">
             <div class="card">
-                <div class="card-lang">Electronics · Hardware</div>
+                <div class="card-tag">Electronics · Hardware</div>
                 <div class="card-title">Passive component analysis</div>
-                <p class="card-desc">Deep study of resistor, inductor and capacitor behaviour. Low-pass / high-pass filters and voltage divider circuits applied to real PCB designs.</p>
+                <div class="card-desc">Deep study of resistor, inductor and capacitor behaviour. Low-pass / high-pass filters and voltage divider circuits applied to real PCB designs.</div>
                 <div class="card-footer">
-                    <span class="card-meta">2024 · completed</span>
-                    <span class="card-link">view →</span>
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-lang">Python · PyTorch</div>
+                <div class="card-tag">Python · PyTorch</div>
                 <div class="card-title">Neural network architecture</div>
-                <p class="card-desc">Experimenting with hidden-layer depth, ReLU vs Sigmoid activations, and supervised learning on labelled datasets.</p>
+                <div class="card-desc">Experimenting with hidden-layer depth, ReLU vs Sigmoid activations and supervised training on labelled datasets.</div>
                 <div class="card-footer">
-                    <span class="card-meta">2025 · in progress</span>
-                    <span class="card-link">view →</span>
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- SANG FILES -->
-    <section id="sang-files" class="page">
-        <div class="eyebrow">// files/</div>
+    <section id="s-files" class="page">
+        <div class="kicker">Sang Truong</div>
         <h1 class="page-title">Documents &<br><em>Source Code</em></h1>
-        <p class="page-lead">Upload code files, PDF reports or experimental result images for Sang Truong.</p>
+        <p class="page-desc">Files are managed via the GitHub repository. Click any entry to view or download.</p>
 
-        <div class="row-rule"><span class="row-rule-label">Upload</span><span class="row-rule-line"></span></div>
-        <div class="upload-zone" id="st-zone">
-            <input type="file" multiple accept=".cpp,.h,.py,.ino,.pdf,.png,.jpg,.txt,.md" onchange="handleFiles(this.files,'st-list')">
-            <div class="upload-ico">↑</div>
-            <div class="upload-title">Drop files or click to select</div>
-            <div class="upload-hint">.cpp · .h · .py · .ino · .pdf · .png · .jpg · .md · .txt</div>
+        <div class="notice">
+            <span class="notice-icon">ℹ</span>
+            Files are added by pushing to the repository. To contribute, open a Pull Request on GitHub.
         </div>
-        <div class="file-list" id="st-list"></div>
+
+        <div class="section-label">Available files</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type">.ino</span>
+                <span class="file-name">rc_filter_test.ino</span>
+                <span class="file-desc">Arduino RC filter measurement</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.py</span>
+                <span class="file-name">nn_train.py</span>
+                <span class="file-desc">PyTorch training script</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+            <div class="file-row">
+                <span class="file-type">.pdf</span>
+                <span class="file-name">passive_components_study.pdf</span>
+                <span class="file-desc">Component analysis notes</span>
+                <a class="file-link" href="#">View</a>
+            </div>
+        </div>
     </section>
 
     <!-- GALLERY -->
     <section id="gallery" class="page">
-        <div class="eyebrow">// gallery/</div>
-        <h1 class="page-title">Media &<br><em>Results</em></h1>
-        <p class="page-lead">Experiment photos, result charts and lab equipment images.</p>
+        <div class="kicker">Media</div>
+        <h1 class="page-title">Gallery &<br><em>Results</em></h1>
+        <p class="page-desc">Experiment photos, result charts and lab equipment images. All images are stored in the repository.</p>
 
-        <div class="row-rule"><span class="row-rule-label">Upload images</span><span class="row-rule-line"></span></div>
-        <div class="upload-zone">
-            <input type="file" multiple accept=".png,.jpg,.jpeg,.gif,.webp,.svg" onchange="handleImages(this.files)">
-            <div class="upload-ico">⊞</div>
-            <div class="upload-title">Drop images or click to select</div>
-            <div class="upload-hint">.png · .jpg · .jpeg · .gif · .webp · .svg</div>
-        </div>
-
-        <div class="row-rule" style="margin-top:28px"><span class="row-rule-label">Library</span><span class="row-rule-line"></span></div>
-        <div class="gallery-grid" id="gal-grid">
-            <div class="gal-item">empty</div>
+        <div class="section-label">Images</div>
+        <div class="gallery">
+            <div class="gal-item"><div class="gal-placeholder">histogram_result.png</div></div>
+            <div class="gal-item"><div class="gal-placeholder">scad_housing_v2.png</div></div>
+            <div class="gal-item"><div class="gal-placeholder">pcb_layout.png</div></div>
+            <div class="gal-item"><div class="gal-placeholder">nn_loss_curve.png</div></div>
         </div>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="page">
-        <div class="eyebrow">// contact</div>
+        <div class="kicker">Contact</div>
         <h1 class="page-title">Get In<br><em>Touch</em></h1>
-        <p class="page-lead">All code contributions and bug reports via Pull Request on GitHub. We are open to technical collaboration.</p>
+        <p class="page-desc">All code contributions and bug reports via Pull Request on GitHub. We are open to technical collaboration and discussion.</p>
 
-        <div class="row-rule"><span class="row-rule-label">Channels</span><span class="row-rule-line"></span></div>
+        <div class="section-label">Channels</div>
         <div class="contact-grid">
-            <div class="contact-item">
+            <div class="contact-card">
                 <div class="contact-ico">gh</div>
                 <div>
-                    <div class="contact-key">GitHub</div>
+                    <div class="contact-lbl">GitHub</div>
                     <div class="contact-val">github.com/hslabs</div>
                 </div>
             </div>
-            <div class="contact-item">
+            <div class="contact-card">
                 <div class="contact-ico">@</div>
                 <div>
-                    <div class="contact-key">Email</div>
+                    <div class="contact-lbl">Email</div>
                     <div class="contact-val">hslabs@example.com</div>
                 </div>
             </div>
-            <div class="contact-item">
+            <div class="contact-card">
                 <div class="contact-ico">pr</div>
                 <div>
-                    <div class="contact-key">Pull Requests</div>
+                    <div class="contact-lbl">Pull Requests</div>
                     <div class="contact-val">Always welcome</div>
                 </div>
             </div>
-            <div class="contact-item">
+            <div class="contact-card">
                 <div class="contact-ico">!</div>
                 <div>
-                    <div class="contact-key">Issues & Bugs</div>
+                    <div class="contact-lbl">Issues & Bugs</div>
                     <div class="contact-val">GitHub Issues</div>
                 </div>
             </div>
@@ -925,16 +1017,12 @@
 </main>
 
 <script>
-    function showPage(id, el) {
+    function go(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.querySelectorAll('.nav-sub-item').forEach(i => i.classList.remove('active'));
-        if (el) {
-            if (el.classList.contains('nav-item')) el.classList.add('active');
-            if (el.classList.contains('nav-sub-item')) el.classList.add('active');
-        }
-        if (window.innerWidth <= 720) document.getElementById('sidebar').classList.remove('open');
+        document.querySelectorAll('.nav-item, .nav-sub-item').forEach(i => i.classList.remove('active'));
+        if (el) el.classList.add('active');
+        if (window.innerWidth <= 700) document.getElementById('sidebar').classList.remove('open');
     }
 
     function toggleSub(id, el) {
@@ -943,61 +1031,9 @@
         el.classList.toggle('open', open);
     }
 
-    function toggleSidebar() {
+    function toggleMob() {
         document.getElementById('sidebar').classList.toggle('open');
     }
-
-    const fileIcons = {
-        cpp:'[c++]', h:'[.h]', py:'[py]', ino:'[ino]', scad:'[scad]',
-        pdf:'[pdf]', png:'[img]', jpg:'[img]', jpeg:'[img]',
-        md:'[md]', txt:'[txt]', root:'[root]', gif:'[gif]', webp:'[img]'
-    };
-
-    function ext(n) { return n.split('.').pop().toLowerCase(); }
-
-    function fmtSize(b) {
-        if (b < 1024) return b + ' B';
-        if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
-        return (b/1048576).toFixed(1) + ' MB';
-    }
-
-    function handleFiles(files, listId) {
-        const list = document.getElementById(listId);
-        Array.from(files).forEach(f => {
-            const el = document.createElement('div');
-            el.className = 'file-item';
-            el.innerHTML = `
-                <span class="file-ico">${fileIcons[ext(f.name)] || '[?]'}</span>
-                <span class="file-name">${f.name}</span>
-                <span class="file-sz">${fmtSize(f.size)}</span>
-                <button class="file-rm" onclick="this.closest('.file-item').remove()">rm</button>`;
-            list.appendChild(el);
-        });
-    }
-
-    function handleImages(files) {
-        const grid = document.getElementById('gal-grid');
-        const empty = grid.querySelector('.gal-item');
-        if (empty && empty.textContent === 'empty') empty.remove();
-        Array.from(files).forEach(f => {
-            if (!f.type.startsWith('image/')) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                const item = document.createElement('div');
-                item.className = 'gal-item';
-                item.innerHTML = `<img src="${e.target.result}" alt="${f.name}">`;
-                item.onclick = () => window.open(e.target.result);
-                grid.insertBefore(item, grid.firstChild);
-            };
-            reader.readAsDataURL(f);
-        });
-    }
-
-    document.querySelectorAll('.upload-zone').forEach(z => {
-        z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag-over'); });
-        z.addEventListener('dragleave', () => z.classList.remove('drag-over'));
-        z.addEventListener('drop', e => { e.preventDefault(); z.classList.remove('drag-over'); });
-    });
 </script>
 </body>
 </html>
