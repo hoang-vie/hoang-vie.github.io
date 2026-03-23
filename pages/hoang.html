@@ -3,9 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sang Truong — H & S Lab</title>
+    <title>Hoang Nguyen — H & S Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ══ PROJECT MODAL ══ */
+        .proj-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(8,18,30,0.60);
+            backdrop-filter: blur(4px);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .proj-backdrop.open { display: flex; animation: fadeIn .18s ease; }
+
+        .proj-modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: min(780px, 96vw);
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 32px 100px rgba(8,18,30,0.32);
+            animation: popUp .24s cubic-bezier(.34,1.35,.64,1);
+        }
+
+        .proj-modal-header {
+            position: sticky; top: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 28px;
+            display: flex; align-items: flex-start; gap: 16px;
+            z-index: 2;
+        }
+
+        .proj-modal-meta { flex: 1; }
+
+        .proj-modal-tag {
+            font-family: var(--mono);
+            font-size: 0.58rem; letter-spacing: .08em;
+            color: var(--accent); background: var(--accent-bg);
+            border: 1px solid var(--accent-br); border-radius: 4px;
+            padding: 3px 9px; display: inline-block; margin-bottom: 8px;
+        }
+
+        .proj-modal-title {
+            font-size: 1.25rem; font-weight: 800;
+            color: var(--text); letter-spacing: -.022em; line-height: 1.25;
+        }
+
+        .proj-modal-close {
+            width: 30px; height: 30px;
+            border: 1px solid var(--border); border-radius: 7px;
+            background: transparent; cursor: pointer; color: var(--text-soft);
+            font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: background .14s, color .14s;
+        }
+        .proj-modal-close:hover { background: #fde8e8; color: #b02020; border-color: #f0a0a0; }
+
+        .proj-modal-body { padding: 28px 28px 32px; }
+
+        .proj-section-title {
+            font-family: var(--mono); font-size: 0.58rem;
+            letter-spacing: .14em; text-transform: uppercase;
+            color: var(--text-soft); border-bottom: 1px solid var(--border);
+            padding-bottom: 8px; margin: 24px 0 14px;
+        }
+        .proj-section-title:first-child { margin-top: 0; }
+
+        .proj-modal-body p { font-size: 0.87rem; color: var(--text-mid); line-height: 1.82; }
+
+        .proj-stat-row {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: 10px; margin: 16px 0;
+        }
+
+        .proj-stat {
+            background: var(--accent-bg); border: 1px solid var(--accent-br);
+            border-radius: 9px; padding: 14px 16px; text-align: center;
+        }
+
+        .proj-stat-val {
+            font-family: var(--mono); font-size: 1.3rem; font-weight: 500;
+            color: var(--accent); letter-spacing: -.03em;
+        }
+
+        .proj-stat-lbl { font-size: 0.72rem; color: var(--text-soft); margin-top: 3px; }
+
+        .proj-step-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .proj-step { display: flex; gap: 14px; align-items: flex-start; }
+
+        .proj-step-num {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--sidebar-bg); color: #fff;
+            font-family: var(--mono); font-size: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 1px;
+        }
+
+        .proj-step-text { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; }
+        .proj-step-text strong { color: var(--text); }
+
+        .proj-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+
+        .proj-tag {
+            font-family: var(--mono); font-size: 0.65rem;
+            padding: 4px 10px; border-radius: 5px;
+            border: 1px solid var(--border); color: var(--text-mid); background: var(--surface);
+        }
+
+        .proj-result-box {
+            background: #f4faf6; border: 1px solid #a8e0c0;
+            border-radius: 9px; padding: 16px 20px; margin-top: 12px;
+        }
+        .proj-result-box .label {
+            font-family: var(--mono); font-size: 0.58rem;
+            color: var(--green); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px;
+        }
+        .proj-result-box p { font-size: 0.85rem; color: var(--text); }
+
+        /* card pointer */
+        .card { cursor: pointer; }
+        .card-read-more {
+            font-family: var(--mono); font-size: 0.62rem;
+            color: var(--accent); margin-top: 10px; opacity: 0; transition: opacity .16s;
+        }
+        .card:hover .card-read-more { opacity: 1; }
+
+        /* viewer note */
+        .viewer-note {
+            font-family: var(--mono); font-size: 0.68rem; color: var(--text-soft);
+            background: var(--accent-bg); border: 1px solid var(--accent-br);
+            border-radius: 6px; padding: 8px 14px; margin-bottom: 14px; display: none;
+        }
+
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes popUp  { from{transform:scale(.93);opacity:0} to{transform:scale(1);opacity:1} }
+
+        @media(max-width:700px){
+            .proj-stat-row{grid-template-columns:1fr 1fr;}
+            .proj-modal-body{padding:20px 18px 24px;}
+        }
+    </style>
 </head>
 <body>
 
@@ -16,118 +160,511 @@
         <a href="../index.html" class="brand-name">H <span>&</span> S Lab</a>
         <div class="brand-tagline">research portfolio</div>
     </div>
-
     <div class="nav-section">
         <div class="nav-label">Menu</div>
         <a class="nav-item" href="../index.html">Home</a>
-
-        <div class="nav-item" onclick="toggleSub('sub-h', this)">
+        <div class="nav-item open active" onclick="toggleSub('sub-h', this)">
             Hoang Nguyen <span class="nav-chevron">▶</span>
         </div>
-        <div class="nav-sub" id="sub-h">
-            <a class="nav-sub-item" href="hoang.html#profile">Profile</a>
-            <a class="nav-sub-item" href="hoang.html#projects">Projects</a>
-            <a class="nav-sub-item" href="hoang.html#files">Files</a>
+        <div class="nav-sub open" id="sub-h">
+            <a class="nav-sub-item" href="#" onclick="switchTabById('profile');  return false;">Profile</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
+            <a class="nav-sub-item" href="#" onclick="switchTabById('files');    return false;">Files</a>
         </div>
-
-        <div class="nav-item open active" onclick="toggleSub('sub-s', this)">
+        <div class="nav-item" onclick="toggleSub('sub-s', this)">
             Sang Truong <span class="nav-chevron">▶</span>
         </div>
-        <div class="nav-sub open" id="sub-s">
-            <a class="nav-sub-item active" data-page="sang.html" href="#" onclick="switchTabById('profile'); return false;">Profile</a>
-            <a class="nav-sub-item" data-page="sang.html" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
-            <a class="nav-sub-item" data-page="sang.html" href="#" onclick="switchTabById('files'); return false;">Files</a>
+        <div class="nav-sub" id="sub-s">
+            <a class="nav-sub-item" href="sang.html">Profile</a>
+            <a class="nav-sub-item" href="sang.html#projects">Projects</a>
+            <a class="nav-sub-item" href="sang.html#files">Files</a>
         </div>
-
         <a class="nav-item" href="../index.html#gallery">Gallery</a>
         <a class="nav-item" href="../index.html#contact">Contact</a>
     </div>
-
-    <div class="sidebar-foot">
-        <span class="live-dot"></span> GitHub Pages
-    </div>
+    <div class="sidebar-foot"><span class="live-dot"></span> GitHub Pages</div>
 </nav>
 
 <main class="main">
 <div class="page-wrap">
 
-    <div class="kicker">Sang Truong</div>
+    <div class="kicker">Hoang Nguyen</div>
     <h1 class="page-title">Research <em>Profile</em></h1>
 
-    <div class="tab-bar" id="sang-tabs">
-        <a class="tab active" data-tab="profile"  onclick="switchTabById('profile'); return false;" href="#">Profile</a>
+    <div class="tab-bar" id="hoang-tabs">
+        <a class="tab active" data-tab="profile"  onclick="switchTabById('profile');  return false;" href="#">Profile</a>
         <a class="tab"        data-tab="projects" onclick="switchTabById('projects'); return false;" href="#">Projects</a>
-        <a class="tab"        data-tab="files"    onclick="switchTabById('files'); return false;" href="#">Files</a>
+        <a class="tab"        data-tab="files"    onclick="switchTabById('files');    return false;" href="#">Files</a>
     </div>
 
+    <!-- ════ PROFILE ════ -->
     <div class="tab-panel active" id="profile">
         <div class="profile-header">
-            <div class="avatar">ST</div>
+            <div class="avatar">
+                <img src="../images/avatar_hoang.jpg" alt="Hoang Nguyen"
+                     onerror="this.style.display='none';this.parentElement.textContent='HN';">
+            </div>
             <div>
-                <div class="profile-name">Sang Truong</div>
-                <div class="profile-role">Hardware Design · ML Architecture · Embedded Systems</div>
+                <div class="profile-name">Hoang Nguyen</div>
+                <div class="profile-role">Detector Physics · Signal Processing · Computational Analysis</div>
                 <div class="profile-bio">
-                    Hardware development from passive components to microcontrollers, combined with neural network design and training. Interested in the intersection of embedded hardware and machine intelligence.
+                    Working at the intersection of experimental particle physics and computational
+                    methods. Primary focus: scintillator-based detector optimisation, waveform
+                    analysis with the SAMPIC digitiser, and automated data pipelines in the
+                    ROOT / C++ ecosystem. Parallel interest in 3-D parametric modelling for
+                    prototype fabrication using OpenSCAD and Geant4 Monte Carlo simulation.
                 </div>
             </div>
         </div>
-        <div class="section-label">Skills</div>
-        <div class="skills">
-            <span class="skill">Electronics</span><span class="skill">Arduino / ESP32</span><span class="skill">Python</span>
-            <span class="skill">PyTorch</span><span class="skill">Neural Networks</span><span class="skill">Supervised Learning</span>
-        </div>
-    </div>
 
+        <div class="section-label">Technical Skills</div>
+        <div class="skills">
+            <span class="skill">C++ / ROOT</span>
+            <span class="skill">Geant4 MC</span>
+            <span class="skill">SAMPIC Digitiser</span>
+            <span class="skill">OpenSCAD</span>
+            <span class="skill">Python / NumPy</span>
+            <span class="skill">Signal Processing</span>
+            <span class="skill">Histogram Analysis</span>
+            <span class="skill">3D Prototype Design</span>
+            <span class="skill">WSL2 / Linux</span>
+            <span class="skill">Git</span>
+        </div>
+
+        <div class="section-label">Research Timeline</div>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-date">Jun 2025</div>
+                <div>
+                    <div class="tl-title">Scintillator housing geometry v2</div>
+                    <div class="tl-desc">Migrated optical component model from cylinder to cube geometry in OpenSCAD.
+                    Preliminary Geant4 simulation estimates +18 % improvement in photon collection efficiency.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">Mar 2025</div>
+                <div>
+                    <div class="tl-title">ROOT histogram pipeline — completed</div>
+                    <div class="tl-desc">Automated h_sampic array extraction, multi-channel overlay rendering
+                    and custom TLegend formatting. Reduced manual analysis time from ~3 h to under 8 min per run.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">Nov 2024</div>
+                <div>
+                    <div class="tl-title">WSL2 + Geant4 build environment</div>
+                    <div class="tl-desc">Documented full installation and optimisation pipeline for Geant4 v11
+                    and ROOT v6 on WSL2. Reduced cold-build time by 40 % via ccache configuration.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">Sep 2024</div>
+                <div>
+                    <div class="tl-title">SAMPIC waveform analysis — first results</div>
+                    <div class="tl-desc">Extracted timing resolution and charge spectra from raw SAMPIC binary frames.
+                    Established baseline noise floor at σ ≈ 0.4 mV.</div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /profile -->
+
+    <!-- ════ PROJECTS ════ -->
     <div class="tab-panel" id="projects">
         <div class="cards">
-            <div class="card">
-                <div class="card-tag">Electronics · Hardware</div>
-                <div class="card-title">Passive component analysis</div>
-                <div class="card-desc">Deep study of resistor, inductor and capacitor behaviour.</div>
-                <div class="card-footer"><div class="card-status"><span class="dot-status dot-done"></span> Completed</div><div class="card-year">2024</div></div>
-            </div>
-            <div class="card">
-                <div class="card-tag">Python · PyTorch</div>
-                <div class="card-title">Neural network architecture</div>
-                <div class="card-desc">Experimenting with hidden-layer depth, ReLU vs Sigmoid activations.</div>
-                <div class="card-footer"><div class="card-status"><span class="dot-status dot-active"></span> In progress</div><div class="card-year">2025</div></div>
-            </div>
-        </div>
-    </div>
 
+            <div class="card" onclick="openProject('proj-scad')">
+                <div class="card-tag">OpenSCAD · Geant4 · 3D</div>
+                <div class="card-title">Scintillator Housing Optimisation</div>
+                <div class="card-desc">Parametric cube-geometry housing for LYSO crystals.
+                Solid-angle study via Monte Carlo photon transport in Geant4.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+            <div class="card" onclick="openProject('proj-root')">
+                <div class="card-tag">C++ · ROOT · SAMPIC</div>
+                <div class="card-title">Waveform Analysis Pipeline</div>
+                <div class="card-desc">End-to-end ROOT pipeline: binary frame decoding,
+                baseline correction, charge integration and histogram export.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024 – 2025</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+            <div class="card" onclick="openProject('proj-geant')">
+                <div class="card-tag">Geant4 · C++ · MC Simulation</div>
+                <div class="card-title">Optical Photon MC Simulation</div>
+                <div class="card-desc">Full Geant4 optical simulation of scintillator–SiPM coupling.
+                Photon yield, timing jitter and surface-finish studies.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+            <div class="card" onclick="openProject('proj-wsl')">
+                <div class="card-tag">Linux · WSL2 · DevOps</div>
+                <div class="card-title">Build Environment Documentation</div>
+                <div class="card-desc">Reproducible WSL2 setup for ROOT + Geant4. Covers install,
+                ccache tuning, disk relocation and benchmarks.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+        </div>
+    </div><!-- /projects -->
+
+    <!-- ════ FILES ════ -->
     <div class="tab-panel" id="files">
         <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:24px;line-height:1.7;">
-            Files are managed via the GitHub repository.
+            All source files are versioned in the GitHub repository.
+            <strong>View</strong> opens an inline reader &nbsp;·&nbsp; <strong>↓</strong> downloads the raw file.
         </p>
-        <div class="section-label">Source code</div>
+
+        <div class="section-label">Source Code</div>
         <div class="file-grid">
             <div class="file-row">
-                <span class="file-type">.ino</span>
-                <span class="file-name">rc_filter_test.ino</span>
-                <span class="file-desc">Arduino RC filter measurement</span>
-                <a class="file-link" href="#" onclick="viewFile('../code/sang/rc_filter_test.ino','rc_filter_test.ino'); return false;">View</a>
+                <span class="file-type ft-scad">.scad</span>
+                <span class="file-name">optical_housing_v2.scad</span>
+                <span class="file-desc">Cube geometry — scintillator housing</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/optical_housing_v2.scad','optical_housing_v2.scad');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/optical_housing_v2.scad" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-cpp">.cpp</span>
+                <span class="file-name">histogram_pipeline.cpp</span>
+                <span class="file-desc">h_sampic extraction & ROOT render</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/histogram_pipeline.cpp','histogram_pipeline.cpp');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/histogram_pipeline.cpp" download>↓</a>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+        <div class="section-label" style="margin-top:28px;">Reports</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type ft-pdf">.pdf</span>
+                <span class="file-name">analysis_report_2024.pdf</span>
+                <span class="file-desc">Experimental results summary</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../project/Hoang/analysis_report_2024.pdf" target="_blank">View</a>
+                    <a class="file-link dl" href="../project/Hoang/analysis_report_2024.pdf" download>↓</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label" style="margin-top:28px;">Install &amp; Setup Notes</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type ft-txt">.txt</span>
+                <span class="file-name">Install_Geant4.txt</span>
+                <span class="file-desc">Geant4 v11 full installation guide</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/Install_Geant4.txt','Install_Geant4.txt');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_Geant4.txt" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-txt">.txt</span>
+                <span class="file-name">Install_ROOTCERN.txt</span>
+                <span class="file-desc">ROOT CERN v6 installation guide</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/Install_ROOTCERN.txt','Install_ROOTCERN.txt');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_ROOTCERN.txt" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-txt">.txt</span>
+                <span class="file-name">Install_WSL.txt</span>
+                <span class="file-desc">WSL2 setup & configuration</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/Install_WSL.txt','Install_WSL.txt');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_WSL.txt" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-txt">.txt</span>
+                <span class="file-name">Move_WSL.txt</span>
+                <span class="file-desc">Moving WSL distro to another drive</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/Move_WSL.txt','Move_WSL.txt');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Move_WSL.txt" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-txt">.txt</span>
+                <span class="file-name">Optimeze_data_wsl.txt</span>
+                <span class="file-desc">WSL I/O & storage optimisation</span>
+                <div class="file-actions">
+                    <a class="file-link" href="#" onclick="viewFile('../project/Hoang/Optimeze_data_wsl.txt','Optimeze_data_wsl.txt');return false;">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Optimeze_data_wsl.txt" download>↓</a>
+                </div>
+            </div>
+        </div>
+    </div><!-- /files -->
+
+</div><!-- /page-wrap -->
 </main>
 
-<div class="modal-backdrop" id="viewer-modal">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 class="modal-title" id="viewer-filename">file</h3>
-            <button class="modal-close" onclick="closeModal('viewer-modal')">✕</button>
+<!-- ═══════════ PROJECT MODALS ═══════════ -->
+
+<div class="proj-backdrop" id="proj-scad" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">OpenSCAD · Geant4 · 3D Modelling</div>
+        <div class="proj-modal-title">Scintillator Housing Optimisation</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-scad')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>Design and optimisation of a parametric housing for LYSO scintillator crystals (3×3×5 mm³)
+         coupled to SiPM detectors. The goal is to maximise photon collection efficiency while
+         keeping the geometry machinable on a standard CNC mill.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">+18%</div><div class="proj-stat-lbl">Photon yield (est.)</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">v2</div><div class="proj-stat-lbl">Current revision</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">4</div><div class="proj-stat-lbl">Geometry variants tested</div></div>
+      </div>
+      <div class="proj-section-title">Methodology</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Parametric CAD (OpenSCAD)</strong> — housing dimensions driven by variables; wall thickness, reflector gap and crystal clearance all configurable without touching geometry code.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Cylinder → cube migration</strong> — previous cylindrical design left dead corners with no reflective coverage. Cube form closes this gap and simplifies milling.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Geant4 optical simulation</strong> — 10⁶ optical photons generated isotropically inside the crystal. Photon detection probability scored at the SiPM active surface for each geometry variant.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Surface finish study</strong> — ESR mirror film vs white Teflon tape vs bare Al compared. ESR + cube combination yields highest yield in simulation.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">📐 Key result</div>
+        <p>Cube geometry with ESR reflector film: estimated photon collection probability rises from 31.4 % (cylinder baseline) to 37.0 % — a relative improvement of 17.8 %. Prototype fabrication scheduled Q3 2025.</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">OpenSCAD 2021.01</span><span class="proj-tag">Geant4 v11.1</span>
+        <span class="proj-tag">ROOT v6.28</span><span class="proj-tag">C++17</span>
+        <span class="proj-tag">LYSO crystal</span><span class="proj-tag">SiPM (Hamamatsu S13360)</span>
+        <span class="proj-tag">ESR reflector</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-root" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">C++ · ROOT · SAMPIC</div>
+        <div class="proj-modal-title">Waveform Analysis Pipeline</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-root')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>A fully automated ROOT/C++ pipeline that processes raw binary output from the SAMPIC waveform digitiser: binary frame decoding → baseline subtraction → charge integration → multi-channel histogram export. Reduces per-run analysis time from ~3 h (manual) to under 8 min.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">~22×</div><div class="proj-stat-lbl">Speed-up vs manual</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">64</div><div class="proj-stat-lbl">Channels supported</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">0.4 mV</div><div class="proj-stat-lbl">Noise floor σ</div></div>
+      </div>
+      <div class="proj-section-title">Pipeline Steps</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Binary parsing</strong> — SAMPIC frame header decoded; sample arrays extracted into ROOT TTree per channel per event.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Baseline correction</strong> — first 10 samples averaged per waveform; baseline vector subtracted sample-by-sample.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Charge integration</strong> — trapezoidal integration over a configurable gate window [t₀, t₀+Δt]. Gate optimised per channel.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Histogram rendering</strong> — h_sampic[64] array filled; multi-layer overlay canvas drawn with custom TLegend and colour palette.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">✅ Status — completed</div>
+        <p>Pipeline deployed and validated on real testbeam data. Charge spectra for 16 SiPM channels rendered in a single ROOT macro call. Output: PDF canvas + ROOT file with all histograms stored.</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">ROOT v6.28 / TTree</span><span class="proj-tag">SAMPIC digitiser</span>
+        <span class="proj-tag">C++17</span><span class="proj-tag">TH1F / TCanvas</span>
+        <span class="proj-tag">TLegend</span><span class="proj-tag">Bash scripting</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-geant" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">Geant4 · C++ · MC Simulation</div>
+        <div class="proj-modal-title">Optical Photon MC Simulation</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-geant')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>Full Geant4 simulation of optical photon transport inside a scintillator–reflector–SiPM assembly. Used to predict photon detection efficiency, timing jitter and the impact of surface finish before committing to physical prototypes.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">10⁶</div><div class="proj-stat-lbl">Photons / run</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">4</div><div class="proj-stat-lbl">Surface models tested</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">~14 min</div><div class="proj-stat-lbl">Run time (8 cores)</div></div>
+      </div>
+      <div class="proj-section-title">Simulation Details</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Geometry construction</strong> — G4Box / G4OpticalSurface definitions for crystal, air gap, reflector and SiPM sensitive volume.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Physics list</strong> — G4OpticalPhysics with Rayleigh scattering, absorption, and boundary processes. Refractive indices from NIST material database.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Scoring</strong> — sensitive detector on SiPM face records hit time and wavelength. Output written to ROOT TTree for offline analysis.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">🔬 In progress</div>
+        <p>Currently tuning optical surface roughness parameters (σ_alpha) to match bench-top measurements. Next step: timing resolution study as a function of crystal length (5 mm → 20 mm).</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">Geant4 v11.1</span><span class="proj-tag">G4OpticalPhysics</span>
+        <span class="proj-tag">C++17</span><span class="proj-tag">ROOT v6 output</span>
+        <span class="proj-tag">CMake</span><span class="proj-tag">WSL2 / Ubuntu 22.04</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-wsl" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">Linux · WSL2 · DevOps</div>
+        <div class="proj-modal-title">Build Environment Documentation</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-wsl')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>A set of reproducible guides covering the full setup of a ROOT + Geant4 development environment on WSL2. Includes performance tuning, disk relocation and benchmarks — intended to be usable by other students without Linux experience.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">5</div><div class="proj-stat-lbl">Guide documents</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">−40%</div><div class="proj-stat-lbl">Build time (ccache)</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">2.5 h</div><div class="proj-stat-lbl">Zero-to-running time</div></div>
+      </div>
+      <div class="proj-section-title">Documents Included</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Install_WSL.txt</strong> — WSL2 enable, Ubuntu 22.04 install, package dependencies, X11 / VcXsrv display setup.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Install_ROOTCERN.txt</strong> — ROOT v6 build from source, CMake flags, environment variables, first-run test.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Install_Geant4.txt</strong> — Geant4 v11 with datasets, GDML, OpenGL visualisation, CMake preset.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Move_WSL.txt</strong> — relocating the WSL vhdx image to a secondary drive to free C: space without reinstalling.</div></div>
+        <div class="proj-step"><div class="proj-step-num">5</div><div class="proj-step-text"><strong>Optimeze_data_wsl.txt</strong> — ccache setup, I/O path optimisation, .wslconfig memory and CPU limits tuning.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">✅ Status — completed</div>
+        <p>All five guides tested on a clean Windows 11 machine. Average time from zero to working Geant4 simulation: 2.5 hours (vs ~6 hours without guides).</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">WSL2 / Ubuntu 22.04</span><span class="proj-tag">Windows 11</span>
+        <span class="proj-tag">CMake 3.26</span><span class="proj-tag">ccache</span>
+        <span class="proj-tag">VcXsrv / X11</span><span class="proj-tag">Bash</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FILE VIEWER ═══════════ -->
+<div class="viewer-backdrop" id="viewer" onclick="closeViewerBackdrop(event)">
+    <div class="viewer-box">
+        <div class="viewer-header">
+            <span class="viewer-title" id="viewer-filename">file</span>
+            <button class="viewer-close" onclick="closeViewer()">✕</button>
         </div>
-        <div class="modal-body" style="padding: 16px 28px;">
+        <div class="viewer-body">
             <div class="viewer-note" id="viewer-note">
                 ⚠ Running locally (file://)? Use <code>python3 -m http.server 8000</code>
+                then open <code>http://localhost:8000</code> — browsers block fetch() on file:// for security.
             </div>
-            <pre class="viewer-pre" id="viewer-content">Loading…</pre>
+            <pre id="viewer-content">Loading…</pre>
         </div>
     </div>
 </div>
 
 <script src="../js/nav.js"></script>
+<script>
+/* ── Tabs ── */
+function switchTabById(tabId) {
+    document.querySelectorAll('#hoang-tabs .tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.tab === tabId));
+    document.querySelectorAll('.tab-panel').forEach(p =>
+        p.classList.toggle('active', p.id === tabId));
+    document.querySelectorAll('#sub-h .nav-sub-item').forEach(i => i.classList.remove('active'));
+    const idx = ['profile','projects','files'].indexOf(tabId);
+    const si  = document.querySelectorAll('#sub-h .nav-sub-item');
+    if (si[idx]) si[idx].classList.add('active');
+    history.replaceState(null, '', '#' + tabId);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const h = window.location.hash.replace('#','');
+    switchTabById(['profile','projects','files'].includes(h) ? h : 'profile');
+});
+
+/* ── Project modals ── */
+function openProject(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeProject(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+}
+function closeOnBackdrop(e, el) {
+    if (e.target === el) closeProject(el.id);
+}
+
+/* ── File viewer ── */
+async function viewFile(path, name) {
+    const bd    = document.getElementById('viewer');
+    const pre   = document.getElementById('viewer-content');
+    const title = document.getElementById('viewer-filename');
+    const note  = document.getElementById('viewer-note');
+
+    title.textContent  = name;
+    pre.textContent    = 'Loading…';
+    note.style.display = 'none';
+    bd.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        pre.textContent = await res.text();
+    } catch(e) {
+        pre.textContent = '⚠ ' + e.message;
+        if (location.protocol === 'file:') note.style.display = 'block';
+    }
+}
+
+function closeViewer() {
+    document.getElementById('viewer').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function closeViewerBackdrop(e) {
+    if (e.target === document.getElementById('viewer')) closeViewer();
+}
+
+/* ── Escape key closes any open modal ── */
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    closeViewer();
+    document.querySelectorAll('.proj-backdrop.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+</script>
 </body>
 </html>
