@@ -1,0 +1,50 @@
+Guide to Compiling and Installing Geant4 (v11.4.1) on Ubuntu
+Purpose: Setting up the Geant4 toolkit for particle physics simulations from source code, complete with modern UI (Qt6), 3D visualization, and multithreading support.
+
+[STEP 1: WORKSPACE PREPARATION & DEPENDENCIES]
+Open your Ubuntu Terminal and run the following commands to set up your environment:
+
+  1. cd ~/software/
+  2. mkdir GEANT4 && cd GEANT4
+  3. sudo apt update
+  4. sudo apt install -y build-essential cmake wget tar libx11-dev libxmu-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libexpat1-dev zlib1g-dev libxerces-c-dev qt6-base-dev qt6-tools-dev libqt6opengl6-dev
+
+// Core Principle: Geant4 is a massive C++ toolkit, not a standard pre-packaged application. 
+// - 'build-essential' & 'cmake' provide the core compilation engines.
+// - The 'libgl...' and X11 packages provide the low-level OpenGL graphics rendering.
+// - 'libxerces-c-dev' is the XML parser required for GDML (Geometry and Tracking Description Markup Language), which is crucial for defining complex detector shapes.
+// - The 'qt6' packages provide the modern graphical user interface for visualizing particle tracks and geometries.
+
+[STEP 2: DOWNLOAD & EXTRACT SOURCE CODE]
+  5. wget https://geant4-data.web.cern.ch/releases/geant4-v11.4.1.tar.gz
+  6. tar -xzf geant4-v11.4.1.tar.gz
+
+[STEP 3: OUT-OF-SOURCE BUILD CONFIGURATION]
+  7. mkdir build install
+  8. cd build
+  9. cmake -DCMAKE_INSTALL_PREFIX=~/software/GEANT4/install \
+           -DGEANT4_INSTALL_DATA=ON \
+           -DGEANT4_USE_QT=ON \
+           -DGEANT4_USE_QT_QT6=ON \
+           -DGEANT4_USE_OPENGL_X11=ON \
+           -DGEANT4_BUILD_MULTITHREADED=ON \
+           -DGEANT4_USE_GDML=ON \
+           ../geant4-v11.4.1
+
+// Core Principle of the CMake Flags: 
+// - Out-of-source build: By compiling inside an empty 'build' folder, you keep the original C++ source code pristine and untouched.
+// - INSTALL_DATA=ON: Tells CMake to automatically download the heavy physics datasets (cross-sections, radioactive decay data) required for accurate physical interactions.
+// - USE_QT & OPENGL: Links the C++ binaries to the UI frameworks downloaded in Step 1, allowing you to visually inspect how light or particles interact with materials.
+// - BUILD_MULTITHREADED=ON: Enables event-level parallelism. Geant4 will utilize multiple CPU cores to simulate different particle events simultaneously, drastically reducing simulation time.
+
+[STEP 4: COMPILATION & INSTALLATION]
+  10. make -j4
+  11. make install
+
+// Core Principle: 'make -j4' tells the compiler to use 4 CPU threads simultaneously to build the C++ libraries. You can change this number based on your CPU (e.g., -j8 if you have 8 cores). 'make install' then moves the compiled, ready-to-use binaries and libraries into the 'install' directory you created earlier.
+
+[STEP 5: ENVIRONMENT VARIABLE SETUP]
+  12. echo 'source ~/software/GEANT4/install/bin/geant4.sh' >> ~/.bashrc
+  13. source ~/.bashrc
+
+// Core Principle: Geant4 relies on dozens of environment variables to locate its physics datasets and C++ header files. Sourcing 'geant4.sh' dynamically loads all these paths into your shell. By appending this to your '.bashrc', Geant4 becomes permanently available every time you open a new terminal.
