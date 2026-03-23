@@ -1,0 +1,19 @@
+This guide will help you safely move your Ubuntu from the present disk to another disk.
+Requirement: Windows Subsystem for Linux (WSL) version must be 2.3.11 or higher.
+
+Start:
+    1. Turn on PowerShell as Administrator.
+    2. wsl --version 
+       // Check if your core WSL engine version is >= 2.3.11
+    3. wsl -l -v 
+       // Find the exact NAME of your Linux distribution (example: Ubuntu-22.04)
+    4. wsl --shutdown 
+       // Make sure your WSL is completely stopped to release file locks
+    5. wsl --manage Ubuntu-22.04 --move D:\WSL\Ubuntu 
+       // Replace 'Ubuntu-22.04' with your distro NAME and set your new destination path
+    6. compact /u "D:\WSL\Ubuntu\ext4.vhdx" 
+       // Uncompress the virtual disk (Hyper-V engine rejects compressed vhdx files)
+    7. icacls "D:\WSL\Ubuntu\ext4.vhdx" /grant Everyone:F 
+       // Grant Full Control to bypass strict folder inheritance and fix 'Access Denied' error
+
+=> Reboot your terminal => Check it

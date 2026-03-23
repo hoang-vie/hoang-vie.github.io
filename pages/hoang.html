@@ -9,7 +9,6 @@
 </head>
 <body>
 
-<!-- ── Sidebar ── -->
 <button class="mob-btn" onclick="toggleMob()">menu</button>
 
 <nav class="sidebar" id="sidebar">
@@ -17,13 +16,9 @@
         <a href="../index.html" class="brand-name">H <span>&</span> S Lab</a>
         <div class="brand-tagline">research portfolio</div>
     </div>
-
     <div class="nav-section">
         <div class="nav-label">Menu</div>
-
         <a class="nav-item" href="../index.html">Home</a>
-
-        <!-- Hoang sub-menu — open by default on this page -->
         <div class="nav-item open active" onclick="toggleSub('sub-h', this)">
             Hoang Nguyen <span class="nav-chevron">▶</span>
         </div>
@@ -32,7 +27,6 @@
             <a class="nav-sub-item" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
             <a class="nav-sub-item" href="#" onclick="switchTabById('files'); return false;">Files</a>
         </div>
-
         <div class="nav-item" onclick="toggleSub('sub-s', this)">
             Sang Truong <span class="nav-chevron">▶</span>
         </div>
@@ -41,37 +35,32 @@
             <a class="nav-sub-item" href="sang.html#projects">Projects</a>
             <a class="nav-sub-item" href="sang.html#files">Files</a>
         </div>
-
         <a class="nav-item" href="../index.html#gallery">Gallery</a>
         <a class="nav-item" href="../index.html#contact">Contact</a>
     </div>
-
     <div class="sidebar-foot">
         <span class="live-dot"></span> GitHub Pages
     </div>
 </nav>
 
-<!-- ── Main ── -->
 <main class="main">
 <div class="page-wrap">
 
     <div class="kicker">Hoang Nguyen</div>
     <h1 class="page-title">Research <em>Profile</em></h1>
 
-    <!-- Tab bar -->
     <div class="tab-bar" id="hoang-tabs">
         <a class="tab active" data-tab="profile"  onclick="switchTabById('profile');  return false;" href="#">Profile</a>
         <a class="tab"        data-tab="projects" onclick="switchTabById('projects'); return false;" href="#">Projects</a>
         <a class="tab"        data-tab="files"    onclick="switchTabById('files');    return false;" href="#">Files</a>
     </div>
 
-    <!-- ── Tab: Profile ── -->
+    <!-- Profile -->
     <div class="tab-panel active" id="profile">
-
         <div class="profile-header">
             <div class="avatar">
-                <!-- Replace with: <img src="../images/hoang.jpg" alt="Hoang"> -->
-                HN
+                <img src="../images/avatar_hoang.jpg" alt="Hoang Nguyen"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='HN'">
             </div>
             <div>
                 <div class="profile-name">Hoang Nguyen</div>
@@ -113,12 +102,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-    </div><!-- /profile -->
-
-    <!-- ── Tab: Projects ── -->
+    <!-- Projects -->
     <div class="tab-panel" id="projects">
-
         <div class="cards">
             <div class="card">
                 <div class="card-tag">OpenSCAD · 3D</div>
@@ -145,15 +132,14 @@
                 </div>
             </div>
         </div>
+    </div>
 
-    </div><!-- /projects -->
-
-    <!-- ── Tab: Files ── -->
+    <!-- Files -->
     <div class="tab-panel" id="files">
 
         <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:24px;line-height:1.7;">
-            Files are managed via the GitHub repository.
-            To add a file, push it to the repo and add a row below.
+            Files are hosted on the GitHub repository.
+            Click <strong>View</strong> to read online, or <strong>↓</strong> to download.
         </p>
 
         <div class="section-label">Source code</div>
@@ -162,14 +148,68 @@
                 <span class="file-type">.scad</span>
                 <span class="file-name">optical_housing_v2.scad</span>
                 <span class="file-desc">Cube geometry — scintillator housing</span>
-                <!-- Update href to the real path, e.g. href="../code/hoang/optical_housing_v2.scad" -->
-                <a class="file-link" href="#">View</a>
+                <div class="file-actions">
+                    <a class="file-link" href="../project/Hoang/optical_housing_v2.scad" target="_blank">View</a>
+                    <a class="file-link dl" href="../project/Hoang/optical_housing_v2.scad" download title="Download">↓</a>
+                </div>
             </div>
             <div class="file-row">
                 <span class="file-type">.cpp</span>
                 <span class="file-name">histogram_pipeline.cpp</span>
                 <span class="file-desc">h_sampic extraction & ROOT render</span>
-                <a class="file-link" href="#">View</a>
+                <div class="file-actions">
+                    <a class="file-link" href="../project/Hoang/histogram_pipeline.cpp" target="_blank">View</a>
+                    <a class="file-link dl" href="../project/Hoang/histogram_pipeline.cpp" download title="Download">↓</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label" style="margin-top:28px;">Notes &amp; Guides</div>
+        <div class="file-grid">
+            <div class="file-row">
+                <span class="file-type txt-type">.txt</span>
+                <span class="file-name">Install_Geant4.txt</span>
+                <span class="file-desc">Geant4 installation guide</span>
+                <div class="file-actions">
+                    <a class="file-link" href="file-viewer.html?file=../project/Hoang/Install_Geant4.txt&name=Install_Geant4.txt">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_Geant4.txt" download title="Download">↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type txt-type">.txt</span>
+                <span class="file-name">Install_ROOTCERN.txt</span>
+                <span class="file-desc">ROOT CERN installation guide</span>
+                <div class="file-actions">
+                    <a class="file-link" href="file-viewer.html?file=../project/Hoang/Install_ROOTCERN.txt&name=Install_ROOTCERN.txt">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_ROOTCERN.txt" download title="Download">↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type txt-type">.txt</span>
+                <span class="file-name">Install_WSL.txt</span>
+                <span class="file-desc">Windows Subsystem for Linux setup</span>
+                <div class="file-actions">
+                    <a class="file-link" href="file-viewer.html?file=../project/Hoang/Install_WSL.txt&name=Install_WSL.txt">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Install_WSL.txt" download title="Download">↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type txt-type">.txt</span>
+                <span class="file-name">Move_WSL.txt</span>
+                <span class="file-desc">Moving WSL distro to another drive</span>
+                <div class="file-actions">
+                    <a class="file-link" href="file-viewer.html?file=../project/Hoang/Move_WSL.txt&name=Move_WSL.txt">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Move_WSL.txt" download title="Download">↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type txt-type">.txt</span>
+                <span class="file-name">Optimeze_data_wsl.txt</span>
+                <span class="file-desc">WSL data optimisation notes</span>
+                <div class="file-actions">
+                    <a class="file-link" href="file-viewer.html?file=../project/Hoang/Optimeze_data_wsl.txt&name=Optimeze_data_wsl.txt">View</a>
+                    <a class="file-link dl" href="../project/Hoang/Optimeze_data_wsl.txt" download title="Download">↓</a>
+                </div>
             </div>
         </div>
 
@@ -179,18 +219,20 @@
                 <span class="file-type">.pdf</span>
                 <span class="file-name">analysis_report_2024.pdf</span>
                 <span class="file-desc">Experimental results summary</span>
-                <a class="file-link" href="#">View</a>
+                <div class="file-actions">
+                    <a class="file-link" href="../project/Hoang/analysis_report_2024.pdf" target="_blank">View</a>
+                    <a class="file-link dl" href="../project/Hoang/analysis_report_2024.pdf" download title="Download">↓</a>
+                </div>
             </div>
         </div>
 
     </div><!-- /files -->
 
-</div><!-- /page-wrap -->
+</div>
 </main>
 
 <script src="../js/nav.js"></script>
 <script>
-    /* ── Tab switching for this page ── */
     function switchTabById(tabId) {
         document.querySelectorAll('#hoang-tabs .tab').forEach(t => {
             t.classList.toggle('active', t.dataset.tab === tabId);
@@ -198,26 +240,15 @@
         document.querySelectorAll('.tab-panel').forEach(p => {
             p.classList.toggle('active', p.id === tabId);
         });
-        /* sync sidebar highlight */
-        document.querySelectorAll('#sub-h .nav-sub-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        document.querySelectorAll('#sub-h .nav-sub-item').forEach(item => item.classList.remove('active'));
         const idx = ['profile','projects','files'].indexOf(tabId);
         const sideItems = document.querySelectorAll('#sub-h .nav-sub-item');
         if (sideItems[idx]) sideItems[idx].classList.add('active');
-
-        /* update URL hash without page jump */
         history.replaceState(null, '', '#' + tabId);
     }
-
-    /* ── Open tab from URL hash on load ── */
     document.addEventListener('DOMContentLoaded', function () {
         const hash = window.location.hash.replace('#', '');
-        if (['profile','projects','files'].includes(hash)) {
-            switchTabById(hash);
-        } else {
-            switchTabById('profile');
-        }
+        switchTabById(['profile','projects','files'].includes(hash) ? hash : 'profile');
     });
 </script>
 </body>

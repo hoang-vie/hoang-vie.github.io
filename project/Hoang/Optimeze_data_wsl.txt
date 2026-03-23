@@ -1,0 +1,25 @@
+Guide to Reclaim and Optimize Unused WSL Disk Space (Compact VHDX)
+Purpose: To shrink the physical size of the virtual disk by reclaiming space that WSL has marked as deleted but hasn't released back to Windows.
+
+[STEP 0: MANDATORY PREREQUISITE - INSIDE LINUX]
+Open your Ubuntu Terminal and clean up unnecessary files to create truly empty memory blocks (zeros):
+  - sudo apt clean
+  - sudo apt autoremove --purge
+
+[PROCEED ON WINDOWS]
+START:
+    1. Open Windows PowerShell as Administrator.
+    2. wsl --shutdown
+       // Stop WSL completely to release the file lock on the virtual disk.
+    3. diskpart
+       // Open the Windows deep-level disk management tool.
+    4. select vdisk file="C:\Users\...\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu...\LocalState\ext4.vhdx"
+       // NOTE: Please replace this with your exact file path.
+    5. attach vdisk readonly
+       // Mount the disk in read-only mode to prevent data corruption during the compaction process.
+    6. compact vdisk
+       // Shrink the physical size of the .vhdx file by crushing the empty blocks created in Step 0.
+    7. detach vdisk
+       // Unmount the disk to return the file to its normal state.
+    8. exit
+       // Close the diskpart tool.
