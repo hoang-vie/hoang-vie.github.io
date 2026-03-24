@@ -1,91 +1,149 @@
 /* ═══════════════════════════════════════════
-   H & S Lab — Navigation helpers
-   Used by index.html (tab switching on home)
-   and by sub-pages (tab switching within page)
+   H & S Lab — modal.js
+   Handles:
+     · Project detail modal  (openProject / closeProject)
+     · File viewer modal     (viewFile)
+     · Shared Escape / backdrop close
+   nav.js handles sidebar toggles & tab switching
    ═══════════════════════════════════════════ */
 
-/* ── Sidebar sub-menu toggle ── */
-function toggleSub(subId, el) {
-    const sub = document.getElementById(subId);
-    if (!sub) return;
-    const opening = !sub.classList.contains('open');
-    sub.classList.toggle('open', opening);
-    el.classList.toggle('open', opening);
-}
+/* ─────────────────────────────────────
+   SHARED MODAL UTILITIES
+───────────────────────────────────── */
 
-/* ── Mobile sidebar ── */
-function toggleMob() {
-    const sb = document.getElementById('sidebar');
-    if (sb) sb.classList.toggle('open');
-}
-
-/* Close sidebar on mobile when clicking outside */
-document.addEventListener('click', function (e) {
-    const sb = document.getElementById('sidebar');
-    const btn = document.querySelector('.mob-btn');
-    if (!sb || !btn) return;
-    if (window.innerWidth > 700) return;
-    if (!sb.contains(e.target) && e.target !== btn) {
-        sb.classList.remove('open');
+/** Lock / unlock body scroll when any modal is open */
+function _lockScroll()   { document.body.style.overflow = 'hidden'; }
+function _unlockScroll() {
+    /* only unlock if NO modal is still open */
+    if (!document.querySelector('.modal-backdrop.open')) {
+        document.body.style.overflow = '';
     }
+}
+
+/** Close backdrop on outside click */
+function closeOnBackdrop(event, el) {
+    if (event.target === el) closeModal(el.id);
+}
+
+/** Generic close — works for any modal-backdrop by id */
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('open');
+    _unlockScroll();
+}
+
+/** Escape key closes any open modal */
+document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.modal-backdrop.open').forEach(function (el) {
+        el.classList.remove('open');
+    });
+    _unlockScroll();
 });
 
-/* ── Tab switching (used inside sub-pages) ── */
-function switchTab(tabId, el) {
-    /* hide all panels in the same tab group */
-    const group = el.closest('.tab-bar');
-    if (!group) return;
+/* ─────────────────────────────────────
+   PROJECT MODAL
+───────────────────────────────────── */
 
-    const container = group.parentElement;
-    container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    group.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-
-    el.classList.add('active');
-    const panel = document.getElementById(tabId);
-    if (panel) panel.classList.add('active');
+/**
+ * openProject('proj-scad')  — pass the modal id
+ * called from card onclick in HTML
+ */
+function openProject(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('open');
+    _lockScroll();
 }
 
-/* ── Index page section switching ── */
-function goSection(id, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item, .nav-sub-item').forEach(i => i.classList.remove('active'));
+/* ─────────────────────────────────────
+   FILE VIEWER MODAL
+───────────────────────────────────── */
 
-    const target = document.getElementById(id);
-    if (target) target.classList.add('active');
-    if (el) el.classList.add('active');
+/**
+ * viewFile('../project/Hoang/Install_Geant4.txt', 'Install_Geant4.txt')
+ * called from file-row buttons in HTML
+ */
+async function viewFile(path, name) {
+    const backdrop = document.getElementById('file-viewer');
+    const titleEl  = document.getElementById('fv-title');
+    const subtitleEl = document.getElementById('fv-subtitle');
+    const dlBtn    = document.getElementById('fv-dl');
+    const toolbar  = document.getElementById('fv-toolbar');
+    const langEl   = document.getElementById('fv-lang');
+    const linesEl  = document.getElementById('fv-lines');
+    const preEl    = document.getElementById('fv-pre');
+    const noteEl   = document.getElementById('fv-note');
 
-    if (window.innerWidth <= 700) {
-        const sb = document.getElementById('sidebar');
-        if (sb) sb.classList.remove('open');
+    /* reset state */
+    titleEl.textContent    = name;
+    subtitleEl.textContent = path;
+    dlBtn.href             = path;
+    dlBtn.download         = name;
+    preEl.textContent      = 'Loading…';
+    linesEl.textContent    = '';
+    noteEl.style.display   = 'none';
+
+    /* detect language from extension */
+    const ext = name.split('.').pop().toLowerCase();
+    const langMap = {
+        txt:'plain text', cpp:'C++', c:'C', py:'Python',
+        scad:'OpenSCAD', ino:'Arduino / C++', pdf:'PDF', md:'Markdown'
+    };
+    langEl.textContent = langMap[ext] || ext;
+
+    backdrop.classList.add('open');
+    _lockScroll();
+
+    try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        preEl.textContent  = text;
+        linesEl.textContent = text.split('\n').length + ' lines';
+    } catch (err) {
+        preEl.textContent = '⚠  ' + err.message;
+        if (location.protocol === 'file:') {
+            noteEl.style.display = 'block';
+        }
     }
 }
 
-/* ── Mark active nav link based on current page URL ── */
-document.addEventListener('DOMContentLoaded', function () {
-    const path = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.nav-item[data-page], .nav-sub-item[data-page]').forEach(el => {
-        if (el.dataset.page === path) {
-            el.classList.add('active');
-            /* also open parent sub-menu if any */
-            const sub = el.closest('.nav-sub');
-            if (sub) {
-                sub.classList.add('open');
-                const parent = sub.previousElementSibling;
-                if (parent && parent.classList.contains('nav-item')) {
-                    parent.classList.add('open');
-                }
-            }
-        }
+/* ─────────────────────────────────────
+   HOANG PAGE — TAB SWITCHING
+   (page-specific; sang.html has its own)
+───────────────────────────────────── */
+
+function switchTabById(tabId) {
+    const tabBar = document.getElementById('hoang-tabs') ||
+                   document.getElementById('sang-tabs');
+    if (!tabBar) return;
+
+    tabBar.querySelectorAll('.tab').forEach(function (t) {
+        t.classList.toggle('active', t.dataset.tab === tabId);
     });
 
-    /* activate first tab panel on sub-pages */
-    document.querySelectorAll('.tab-bar').forEach(bar => {
-        const firstTab = bar.querySelector('.tab');
-        if (firstTab && !bar.querySelector('.tab.active')) {
-            firstTab.classList.add('active');
-            const panelId = firstTab.dataset.tab;
-            const panel = document.getElementById(panelId);
-            if (panel) panel.classList.add('active');
-        }
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+        p.classList.toggle('active', p.id === tabId);
     });
+
+    /* sync sidebar sub-item highlight */
+    const subId = tabBar.id === 'hoang-tabs' ? 'sub-h' : 'sub-s';
+    const subEl = document.getElementById(subId);
+    if (subEl) {
+        subEl.querySelectorAll('.nav-sub-item').forEach(function (i) { i.classList.remove('active'); });
+        const idx = ['profile', 'projects', 'files'].indexOf(tabId);
+        const items = subEl.querySelectorAll('.nav-sub-item');
+        if (items[idx]) items[idx].classList.add('active');
+    }
+
+    history.replaceState(null, '', '#' + tabId);
+}
+
+/* activate tab from URL hash on page load */
+document.addEventListener('DOMContentLoaded', function () {
+    const hash = window.location.hash.replace('#', '');
+    const valid = ['profile', 'projects', 'files'];
+    switchTabById(valid.includes(hash) ? hash : 'profile');
 });
