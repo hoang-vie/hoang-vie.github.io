@@ -6,10 +6,108 @@
     <title>Sang Truong — H & S Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ══ PROJECT MODAL (same as hoang.html) ══ */
+        .proj-backdrop {
+            display: none; position: fixed; inset: 0;
+            background: rgba(8,18,30,0.60); backdrop-filter: blur(4px);
+            z-index: 300; align-items: center; justify-content: center; padding: 20px;
+        }
+        .proj-backdrop.open { display: flex; animation: fadeIn .18s ease; }
+        .proj-modal {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; width: min(780px,96vw); max-height: 88vh;
+            overflow-y: auto; box-shadow: 0 32px 100px rgba(8,18,30,0.32);
+            animation: popUp .24s cubic-bezier(.34,1.35,.64,1);
+        }
+        .proj-modal-header {
+            position: sticky; top: 0; background: var(--surface);
+            border-bottom: 1px solid var(--border); padding: 20px 28px;
+            display: flex; align-items: flex-start; gap: 16px; z-index: 2;
+        }
+        .proj-modal-meta { flex: 1; }
+        .proj-modal-tag {
+            font-family: var(--mono); font-size: 0.58rem; letter-spacing: .08em;
+            color: var(--accent); background: var(--accent-bg);
+            border: 1px solid var(--accent-br); border-radius: 4px;
+            padding: 3px 9px; display: inline-block; margin-bottom: 8px;
+        }
+        .proj-modal-title {
+            font-size: 1.25rem; font-weight: 800; color: var(--text);
+            letter-spacing: -.022em; line-height: 1.25;
+        }
+        .proj-modal-close {
+            width: 30px; height: 30px; border: 1px solid var(--border);
+            border-radius: 7px; background: transparent; cursor: pointer;
+            color: var(--text-soft); font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: background .14s, color .14s;
+        }
+        .proj-modal-close:hover { background: #fde8e8; color: #b02020; border-color: #f0a0a0; }
+        .proj-modal-body { padding: 28px 28px 32px; }
+        .proj-section-title {
+            font-family: var(--mono); font-size: 0.58rem; letter-spacing: .14em;
+            text-transform: uppercase; color: var(--text-soft);
+            border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 24px 0 14px;
+        }
+        .proj-section-title:first-child { margin-top: 0; }
+        .proj-modal-body p { font-size: 0.87rem; color: var(--text-mid); line-height: 1.82; }
+        .proj-stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0; }
+        .proj-stat {
+            background: var(--accent-bg); border: 1px solid var(--accent-br);
+            border-radius: 9px; padding: 14px 16px; text-align: center;
+        }
+        .proj-stat-val {
+            font-family: var(--mono); font-size: 1.3rem; font-weight: 500;
+            color: var(--accent); letter-spacing: -.03em;
+        }
+        .proj-stat-lbl { font-size: 0.72rem; color: var(--text-soft); margin-top: 3px; }
+        .proj-step-list { display: flex; flex-direction: column; gap: 10px; }
+        .proj-step { display: flex; gap: 14px; align-items: flex-start; }
+        .proj-step-num {
+            width: 24px; height: 24px; border-radius: 50%; background: var(--sidebar-bg);
+            color: #fff; font-family: var(--mono); font-size: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 1px;
+        }
+        .proj-step-text { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; }
+        .proj-step-text strong { color: var(--text); }
+        .proj-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .proj-tag {
+            font-family: var(--mono); font-size: 0.65rem; padding: 4px 10px;
+            border-radius: 5px; border: 1px solid var(--border);
+            color: var(--text-mid); background: var(--surface);
+        }
+        .proj-result-box {
+            background: #f4faf6; border: 1px solid #a8e0c0;
+            border-radius: 9px; padding: 16px 20px; margin-top: 12px;
+        }
+        .proj-result-box .label {
+            font-family: var(--mono); font-size: 0.58rem; color: var(--green);
+            letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px;
+        }
+        .proj-result-box p { font-size: 0.85rem; color: var(--text); }
+        .card { cursor: pointer; }
+        .card-read-more {
+            font-family: var(--mono); font-size: 0.62rem; color: var(--accent);
+            margin-top: 10px; opacity: 0; transition: opacity .16s;
+        }
+        .card:hover .card-read-more { opacity: 1; }
+        .viewer-note {
+            font-family: var(--mono); font-size: 0.68rem; color: var(--text-soft);
+            background: var(--accent-bg); border: 1px solid var(--accent-br);
+            border-radius: 6px; padding: 8px 14px; margin-bottom: 14px; display: none;
+        }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes popUp  { from{transform:scale(.93);opacity:0} to{transform:scale(1);opacity:1} }
+        @media(max-width:700px){
+            .proj-stat-row{grid-template-columns:1fr 1fr;}
+            .proj-modal-body{padding:20px 18px 24px;}
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── Sidebar ── -->
 <button class="mob-btn" onclick="toggleMob()">menu</button>
 
 <nav class="sidebar" id="sidebar">
@@ -17,12 +115,9 @@
         <a href="../index.html" class="brand-name">H <span>&</span> S Lab</a>
         <div class="brand-tagline">research portfolio</div>
     </div>
-
     <div class="nav-section">
         <div class="nav-label">Menu</div>
-
         <a class="nav-item" href="../index.html">Home</a>
-
         <div class="nav-item" onclick="toggleSub('sub-h', this)">
             Hoang Nguyen <span class="nav-chevron">▶</span>
         </div>
@@ -31,8 +126,6 @@
             <a class="nav-sub-item" href="hoang.html#projects">Projects</a>
             <a class="nav-sub-item" href="hoang.html#files">Files</a>
         </div>
-
-        <!-- Sang sub-menu — open by default on this page -->
         <div class="nav-item open active" onclick="toggleSub('sub-s', this)">
             Sang Truong <span class="nav-chevron">▶</span>
         </div>
@@ -41,183 +134,467 @@
             <a class="nav-sub-item" href="#" onclick="switchTabById('projects'); return false;">Projects</a>
             <a class="nav-sub-item" href="#" onclick="switchTabById('files');    return false;">Files</a>
         </div>
-
         <a class="nav-item" href="../index.html#gallery">Gallery</a>
         <a class="nav-item" href="../index.html#contact">Contact</a>
     </div>
-
-    <div class="sidebar-foot">
-        <span class="live-dot"></span> GitHub Pages
-    </div>
+    <div class="sidebar-foot"><span class="live-dot"></span> GitHub Pages</div>
 </nav>
 
-<!-- ── Main ── -->
 <main class="main">
 <div class="page-wrap">
 
     <div class="kicker">Sang Truong</div>
     <h1 class="page-title">Research <em>Profile</em></h1>
 
-    <!-- Tab bar -->
     <div class="tab-bar" id="sang-tabs">
         <a class="tab active" data-tab="profile"  onclick="switchTabById('profile');  return false;" href="#">Profile</a>
         <a class="tab"        data-tab="projects" onclick="switchTabById('projects'); return false;" href="#">Projects</a>
         <a class="tab"        data-tab="files"    onclick="switchTabById('files');    return false;" href="#">Files</a>
     </div>
 
-    <!-- ── Tab: Profile ── -->
+    <!-- ════ PROFILE ════ -->
     <div class="tab-panel active" id="profile">
-
         <div class="profile-header">
-            <div class="avatar">
-                <!-- Replace with: <img src="../images/sang.jpg" alt="Sang"> -->
-                ST
-            </div>
+            <div class="avatar">ST</div>
             <div>
                 <div class="profile-name">Sang Truong</div>
-                <div class="profile-role">Hardware Design · ML Architecture · Embedded Systems</div>
+                <div class="profile-role">Hardware Design · Neural Networks · Embedded Systems</div>
                 <div class="profile-bio">
-                    Hardware development from passive components to microcontrollers, combined
-                    with neural network design and training. Interested in the intersection of
-                    embedded hardware and machine intelligence.
+                    Working at the intersection of analog electronics, embedded firmware and
+                    machine learning. Core interest: understanding physical systems from passive
+                    component behaviour up to microcontroller integration, then applying neural
+                    network models to interpret sensor data. Currently exploring supervised
+                    classification architectures in PyTorch for hardware-adjacent signal data.
                 </div>
             </div>
         </div>
 
-        <div class="section-label">Skills</div>
+        <div class="section-label">Technical Skills</div>
         <div class="skills">
-            <span class="skill">Electronics</span>
+            <span class="skill">Electronics / PCB</span>
             <span class="skill">Arduino / ESP32</span>
+            <span class="skill">KiCad</span>
             <span class="skill">Python</span>
             <span class="skill">PyTorch</span>
             <span class="skill">Neural Networks</span>
             <span class="skill">Supervised Learning</span>
-            <span class="skill">PCB Design</span>
-            <span class="skill">Embedded Systems</span>
+            <span class="skill">Oscilloscope / DMM</span>
+            <span class="skill">Embedded C/C++</span>
+            <span class="skill">Git</span>
         </div>
 
-        <div class="section-label">Timeline</div>
+        <div class="section-label">Research Timeline</div>
         <div class="timeline">
             <div class="tl-item">
-                <div class="tl-date">2025</div>
+                <div class="tl-date">Jun 2025</div>
                 <div>
-                    <div class="tl-title">Multi-layer neural network experiments</div>
-                    <div class="tl-desc">Testing hidden-layer configurations and activation functions for classification tasks.</div>
+                    <div class="tl-title">Neural network architecture — ReLU vs Sigmoid study</div>
+                    <div class="tl-desc">Systematic comparison of 2, 3 and 4-hidden-layer MLP configurations
+                    on a tabular sensor dataset. ReLU networks converge 3× faster; best test accuracy 94.2 %.</div>
                 </div>
             </div>
             <div class="tl-item">
-                <div class="tl-date">2024</div>
+                <div class="tl-date">Mar 2025</div>
+                <div>
+                    <div class="tl-title">ESP32 data-logger for RC filter characterisation</div>
+                    <div class="tl-desc">12-bit ADC at 10 kSps logging RC voltage rise/fall to SD card.
+                    Extracted τ = RC within 1.4 % of theoretical value across 6 test configurations.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">Nov 2024</div>
+                <div>
+                    <div class="tl-title">PCB layout — first revision</div>
+                    <div class="tl-desc">Designed a 2-layer test board in KiCad with decoupling network,
+                    voltage divider chain and SMA connectors for RF signal injection.</div>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-date">Aug 2024</div>
                 <div>
                     <div class="tl-title">Passive component fundamentals</div>
-                    <div class="tl-desc">In-depth study of R, L, C behaviour and filter circuits before advancing to MCU integration.</div>
+                    <div class="tl-desc">Systematic study of R, L, C impedance, filter theory and transient
+                    response. Validated all expressions on breadboard with oscilloscope measurements.</div>
                 </div>
             </div>
         </div>
-
     </div><!-- /profile -->
 
-    <!-- ── Tab: Projects ── -->
+    <!-- ════ PROJECTS ════ -->
     <div class="tab-panel" id="projects">
-
         <div class="cards">
-            <div class="card">
-                <div class="card-tag">Electronics · Hardware</div>
-                <div class="card-title">Passive component analysis</div>
-                <div class="card-desc">
-                    Deep study of resistor, inductor and capacitor behaviour. Low-pass / high-pass
-                    filters and voltage divider circuits applied to real PCB designs.
-                </div>
-                <div class="card-footer">
-                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
-                    <div class="card-year">2024</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-tag">Python · PyTorch</div>
-                <div class="card-title">Neural network architecture</div>
-                <div class="card-desc">
-                    Experimenting with hidden-layer depth, ReLU vs Sigmoid activations and
-                    supervised training on labelled datasets.
-                </div>
+
+            <div class="card" onclick="openProject('proj-nn')">
+                <div class="card-tag">Python · PyTorch · ML</div>
+                <div class="card-title">Neural Network Architecture Study</div>
+                <div class="card-desc">Systematic MLP depth and activation function comparison
+                on sensor-derived tabular data. ReLU vs Sigmoid, 2–4 hidden layers.</div>
                 <div class="card-footer">
                     <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
                     <div class="card-year">2025</div>
                 </div>
+                <div class="card-read-more">Click to read more →</div>
             </div>
-        </div>
 
+            <div class="card" onclick="openProject('proj-rc')">
+                <div class="card-tag">Electronics · Arduino · Measurement</div>
+                <div class="card-title">RC Filter Characterisation</div>
+                <div class="card-desc">Breadboard and PCB RC/LC filter measurements with
+                Arduino/ESP32 data-logger. Low-pass, high-pass, band-pass frequency sweeps.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024 – 2025</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+            <div class="card" onclick="openProject('proj-pcb')">
+                <div class="card-tag">KiCad · Hardware · PCB</div>
+                <div class="card-title">Test Board Design v1</div>
+                <div class="card-desc">2-layer PCB with decoupling network, voltage divider chain
+                and SMA connectors. Designed in KiCad, manufactured and bench-tested.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-done"></span> Completed</div>
+                    <div class="card-year">2024</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+            <div class="card" onclick="openProject('proj-embedded')">
+                <div class="card-tag">ESP32 · Embedded C · RTOS</div>
+                <div class="card-title">ESP32 Sensor Data-Logger</div>
+                <div class="card-desc">FreeRTOS-based firmware for continuous ADC sampling,
+                SD-card logging and real-time serial plotting of sensor waveforms.</div>
+                <div class="card-footer">
+                    <div class="card-status"><span class="dot-status dot-active"></span> In progress</div>
+                    <div class="card-year">2025</div>
+                </div>
+                <div class="card-read-more">Click to read more →</div>
+            </div>
+
+        </div>
     </div><!-- /projects -->
 
-    <!-- ── Tab: Files ── -->
+    <!-- ════ FILES ════ -->
     <div class="tab-panel" id="files">
-
         <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:24px;line-height:1.7;">
-            Files are managed via the GitHub repository.
-            To add a file, push it to the repo and add a row below.
+            All source files are versioned in the GitHub repository.
+            <strong>View</strong> opens an inline reader &nbsp;·&nbsp; <strong>↓</strong> downloads the raw file.
         </p>
 
-        <div class="section-label">Source code</div>
+        <div class="section-label">Source Code</div>
         <div class="file-grid">
             <div class="file-row">
-                <span class="file-type">.ino</span>
-                <span class="file-name">rc_filter_test.ino</span>
-                <span class="file-desc">Arduino RC filter measurement</span>
-                <!-- Update href to the real path, e.g. href="../code/sang/rc_filter_test.ino" -->
-                <a class="file-link" href="#">View</a>
+                <span class="file-type ft-py">.py</span>
+                <span class="file-name">nn_train.py</span>
+                <span class="file-desc">PyTorch MLP training script</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../code/sang/nn_train.py" target="_blank">View</a>
+                    <a class="file-link dl" href="../code/sang/nn_train.py" download>↓</a>
+                </div>
             </div>
             <div class="file-row">
-                <span class="file-type">.py</span>
-                <span class="file-name">nn_train.py</span>
-                <span class="file-desc">PyTorch training script</span>
-                <a class="file-link" href="#">View</a>
+                <span class="file-type ft-ino">.ino</span>
+                <span class="file-name">rc_filter_test.ino</span>
+                <span class="file-desc">Arduino RC filter measurement</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../code/sang/rc_filter_test.ino" target="_blank">View</a>
+                    <a class="file-link dl" href="../code/sang/rc_filter_test.ino" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-ino">.ino</span>
+                <span class="file-name">esp32_datalogger.ino</span>
+                <span class="file-desc">FreeRTOS ADC logger — SD card + serial</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../code/sang/esp32_datalogger.ino" target="_blank">View</a>
+                    <a class="file-link dl" href="../code/sang/esp32_datalogger.ino" download>↓</a>
+                </div>
             </div>
         </div>
 
         <div class="section-label" style="margin-top:28px;">Reports</div>
         <div class="file-grid">
             <div class="file-row">
-                <span class="file-type">.pdf</span>
+                <span class="file-type ft-pdf">.pdf</span>
                 <span class="file-name">passive_components_study.pdf</span>
-                <span class="file-desc">Component analysis notes</span>
-                <a class="file-link" href="#">View</a>
+                <span class="file-desc">Component analysis notes & measurements</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../code/sang/passive_components_study.pdf" target="_blank">View</a>
+                    <a class="file-link dl" href="../code/sang/passive_components_study.pdf" download>↓</a>
+                </div>
+            </div>
+            <div class="file-row">
+                <span class="file-type ft-pdf">.pdf</span>
+                <span class="file-name">nn_experiment_log.pdf</span>
+                <span class="file-desc">Training runs, hyperparameter tables, loss curves</span>
+                <div class="file-actions">
+                    <a class="file-link" href="../code/sang/nn_experiment_log.pdf" target="_blank">View</a>
+                    <a class="file-link dl" href="../code/sang/nn_experiment_log.pdf" download>↓</a>
+                </div>
             </div>
         </div>
-
     </div><!-- /files -->
 
 </div><!-- /page-wrap -->
 </main>
 
+<!-- ═══════════ PROJECT MODALS ═══════════ -->
+
+<div class="proj-backdrop" id="proj-nn" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">Python · PyTorch · Supervised Learning</div>
+        <div class="proj-modal-title">Neural Network Architecture Study</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-nn')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>Systematic comparison of multi-layer perceptron (MLP) configurations for supervised
+         classification on a tabular sensor dataset. Variables under study: network depth
+         (2–4 hidden layers), layer width (32–256 neurons) and activation function
+         (ReLU, Sigmoid, Tanh). Goal: identify the architecture with best accuracy/training-cost tradeoff.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">94.2%</div><div class="proj-stat-lbl">Best test accuracy</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">12</div><div class="proj-stat-lbl">Configs compared</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">3×</div><div class="proj-stat-lbl">ReLU convergence speed</div></div>
+      </div>
+      <div class="proj-section-title">Methodology</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Dataset preparation</strong> — tabular sensor readings (voltage, current, temperature) split 70/15/15 train/val/test. Standard-score normalisation applied per feature.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Architecture grid search</strong> — depth ∈ {2,3,4}, width ∈ {32,64,128,256}, activation ∈ {ReLU, Sigmoid, Tanh}. All trained for 100 epochs with Adam (lr=1e-3).</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Regularisation study</strong> — Dropout (p=0.3) and L2 weight decay (λ=1e-4) applied to the best-performing topology; val loss variance reduced by 28 %.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Loss curve analysis</strong> — training and validation loss plotted per epoch; early stopping triggered at patience=10 to prevent overfitting.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">🔬 In progress</div>
+        <p>Best configuration so far: 3-hidden-layer ReLU MLP (128–64–32), test accuracy 94.2 %.
+        Next: experiment with batch normalisation and learning rate scheduling (CosineAnnealingLR).</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">Python 3.11</span><span class="proj-tag">PyTorch 2.2</span>
+        <span class="proj-tag">NumPy</span><span class="proj-tag">Pandas</span>
+        <span class="proj-tag">Matplotlib</span><span class="proj-tag">scikit-learn</span>
+        <span class="proj-tag">Adam optimiser</span><span class="proj-tag">Dropout</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-rc" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">Electronics · Arduino · Measurement</div>
+        <div class="proj-modal-title">RC Filter Characterisation</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-rc')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>Experimental study of RC and LC passive filter circuits — from breadboard prototyping to
+         microcontroller-based automated frequency sweeps. Bode plots generated from ADC
+         measurements; cutoff frequencies compared to theoretical values.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">1.4%</div><div class="proj-stat-lbl">τ measurement error</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">6</div><div class="proj-stat-lbl">RC configs tested</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">10 kSps</div><div class="proj-stat-lbl">ADC sample rate</div></div>
+      </div>
+      <div class="proj-section-title">Methodology</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Breadboard validation</strong> — low-pass RC (R = 1 kΩ, C = 100 nF, f_c = 1.59 kHz) driven by function generator. Rise time measured on oscilloscope; matched theory within 2 %.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Automated sweep (Arduino)</strong> — sketch drives DAC output through 10 Hz–20 kHz in 50-point log steps; ADC records Vout amplitude. Python plots Bode magnitude.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>High-pass & band-pass</strong> — same board reconfigured; cutoff frequencies confirmed at f_c = 1/2πRC. Band-pass centre frequency tuned by LC tank resonance.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>PCB migration</strong> — filter network moved to dedicated 2-layer PCB to eliminate breadboard parasitic capacitance (~5 pF/node) corrupting HF measurements.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">✅ Status — completed</div>
+        <p>All 6 RC configurations characterised. Time constant τ extracted from transient fits:
+        max deviation 1.4 % from R·C. Full Bode plots exported as PDF. PCB v1 manufactured and verified.</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">Arduino Uno</span><span class="proj-tag">ESP32</span>
+        <span class="proj-tag">Function generator</span><span class="proj-tag">Oscilloscope (DSO)</span>
+        <span class="proj-tag">KiCad 7</span><span class="proj-tag">Python / Matplotlib</span>
+        <span class="proj-tag">Passive R/L/C</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-pcb" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">KiCad · Hardware · PCB Design</div>
+        <div class="proj-modal-title">Test Board Design v1</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-pcb')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>First full PCB design cycle: schematic capture → layout → Gerber export → JLCPCB
+         manufacture → bench test. The board provides a clean, repeatable platform for
+         passive filter experiments, replacing error-prone breadboard setups.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">2</div><div class="proj-stat-lbl">Layer count</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">48</div><div class="proj-stat-lbl">Components placed</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">0</div><div class="proj-stat-lbl">DRC errors at fab</div></div>
+      </div>
+      <div class="proj-section-title">Design Details</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Schematic (KiCad)</strong> — voltage divider chain (10 kΩ ladder), decoupling network (100 nF X7R per rail), SMA edge connectors for signal input/output.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>Layout</strong> — ground plane on layer 2 for low-impedance return path. Signal traces kept &lt; 50 mm to minimise parasitic inductance at test frequencies.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Design rule check</strong> — JLCPCB 2-layer rules applied: min trace 0.127 mm, min clearance 0.127 mm, via drill 0.3 mm. Zero DRC violations before Gerber export.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Bench test</strong> — continuity check with DMM, then powered at 3.3 V / 5 V. All voltage rails within ±1 % of target. No shorts detected.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">✅ Status — completed</div>
+        <p>Board manufactured (JLCPCB, 5-day lead time), assembled and validated. Parasitic
+        capacitance on signal nodes reduced from ~5 pF (breadboard) to &lt; 0.5 pF (PCB),
+        enabling reliable measurements above 50 kHz.</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">KiCad 7</span><span class="proj-tag">JLCPCB</span>
+        <span class="proj-tag">Gerber / Excellon</span><span class="proj-tag">DMM</span>
+        <span class="proj-tag">0402 SMD components</span><span class="proj-tag">SMA connector</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proj-backdrop" id="proj-embedded" onclick="closeOnBackdrop(event,this)">
+  <div class="proj-modal">
+    <div class="proj-modal-header">
+      <div class="proj-modal-meta">
+        <div class="proj-modal-tag">ESP32 · Embedded C · FreeRTOS</div>
+        <div class="proj-modal-title">ESP32 Sensor Data-Logger</div>
+      </div>
+      <button class="proj-modal-close" onclick="closeProject('proj-embedded')">✕</button>
+    </div>
+    <div class="proj-modal-body">
+      <div class="proj-section-title">Overview</div>
+      <p>FreeRTOS-based firmware for the ESP32 that continuously samples a multi-channel
+         ADC, writes timestamped records to SD card (FAT32) and streams a live plot
+         to a Python serial dashboard. Designed as a reusable data-acquisition backbone
+         for future hardware experiments.</p>
+      <div class="proj-stat-row">
+        <div class="proj-stat"><div class="proj-stat-val">10 kSps</div><div class="proj-stat-lbl">Sample rate</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">4</div><div class="proj-stat-lbl">ADC channels</div></div>
+        <div class="proj-stat"><div class="proj-stat-val">12-bit</div><div class="proj-stat-lbl">ADC resolution</div></div>
+      </div>
+      <div class="proj-section-title">Firmware Architecture</div>
+      <div class="proj-step-list">
+        <div class="proj-step"><div class="proj-step-num">1</div><div class="proj-step-text"><strong>Sampling task</strong> — high-priority FreeRTOS task reads ADC1 channels at 10 kSps using timer ISR. Samples pushed to a lock-free ring buffer.</div></div>
+        <div class="proj-step"><div class="proj-step-num">2</div><div class="proj-step-text"><strong>SD-write task</strong> — low-priority task drains the ring buffer in 512-byte blocks to SD card (SPI, SDMMC). CSV format: timestamp_us, ch0, ch1, ch2, ch3.</div></div>
+        <div class="proj-step"><div class="proj-step-num">3</div><div class="proj-step-text"><strong>Serial stream</strong> — every 100 ms, a summary packet (min/max/mean per channel) is sent over UART at 921 600 baud for live Python dashboard plotting.</div></div>
+        <div class="proj-step"><div class="proj-step-num">4</div><div class="proj-step-text"><strong>Python dashboard</strong> — Matplotlib animation reads serial port; scrolling 5-second window of all 4 channels rendered in real time.</div></div>
+      </div>
+      <div class="proj-result-box">
+        <div class="label">🔬 In progress</div>
+        <p>Core sampling and SD-write tasks verified; no buffer overruns at 10 kSps with 4 channels.
+        Next: add Wi-Fi OTA update support and a web dashboard to replace the serial cable.</p>
+      </div>
+      <div class="proj-section-title">Tools & Technologies</div>
+      <div class="proj-tag-list">
+        <span class="proj-tag">ESP32 (ESP-IDF)</span><span class="proj-tag">FreeRTOS</span>
+        <span class="proj-tag">Arduino framework</span><span class="proj-tag">SPI / SDMMC</span>
+        <span class="proj-tag">Python / Matplotlib</span><span class="proj-tag">pyserial</span>
+        <span class="proj-tag">FAT32</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FILE VIEWER ═══════════ -->
+<div class="viewer-backdrop" id="viewer" onclick="closeViewerBackdrop(event)">
+    <div class="viewer-box">
+        <div class="viewer-header">
+            <span class="viewer-title" id="viewer-filename">file</span>
+            <button class="viewer-close" onclick="closeViewer()">✕</button>
+        </div>
+        <div class="viewer-body">
+            <div class="viewer-note" id="viewer-note">
+                ⚠ Running locally (file://)? Use <code>python3 -m http.server 8000</code>
+                then open <code>http://localhost:8000</code>.
+            </div>
+            <pre id="viewer-content">Loading…</pre>
+        </div>
+    </div>
+</div>
+
 <script src="../js/nav.js"></script>
 <script>
-    /* ── Tab switching for this page ── */
-    function switchTabById(tabId) {
-        document.querySelectorAll('#sang-tabs .tab').forEach(t => {
-            t.classList.toggle('active', t.dataset.tab === tabId);
-        });
-        document.querySelectorAll('.tab-panel').forEach(p => {
-            p.classList.toggle('active', p.id === tabId);
-        });
-        /* sync sidebar highlight */
-        document.querySelectorAll('#sub-s .nav-sub-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        const idx = ['profile','projects','files'].indexOf(tabId);
-        const sideItems = document.querySelectorAll('#sub-s .nav-sub-item');
-        if (sideItems[idx]) sideItems[idx].classList.add('active');
+function switchTabById(tabId) {
+    document.querySelectorAll('#sang-tabs .tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.tab === tabId));
+    document.querySelectorAll('.tab-panel').forEach(p =>
+        p.classList.toggle('active', p.id === tabId));
+    document.querySelectorAll('#sub-s .nav-sub-item').forEach(i => i.classList.remove('active'));
+    const idx = ['profile','projects','files'].indexOf(tabId);
+    const si  = document.querySelectorAll('#sub-s .nav-sub-item');
+    if (si[idx]) si[idx].classList.add('active');
+    history.replaceState(null, '', '#' + tabId);
+}
 
-        history.replaceState(null, '', '#' + tabId);
+document.addEventListener('DOMContentLoaded', () => {
+    const h = window.location.hash.replace('#','');
+    switchTabById(['profile','projects','files'].includes(h) ? h : 'profile');
+});
+
+function openProject(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeProject(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+}
+function closeOnBackdrop(e, el) {
+    if (e.target === el) closeProject(el.id);
+}
+
+async function viewFile(path, name) {
+    const bd    = document.getElementById('viewer');
+    const pre   = document.getElementById('viewer-content');
+    const title = document.getElementById('viewer-filename');
+    const note  = document.getElementById('viewer-note');
+    title.textContent  = name;
+    pre.textContent    = 'Loading…';
+    note.style.display = 'none';
+    bd.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        pre.textContent = await res.text();
+    } catch(e) {
+        pre.textContent = '⚠ ' + e.message;
+        if (location.protocol === 'file:') note.style.display = 'block';
     }
+}
 
-    /* ── Open tab from URL hash on load ── */
-    document.addEventListener('DOMContentLoaded', function () {
-        const hash = window.location.hash.replace('#', '');
-        if (['profile','projects','files'].includes(hash)) {
-            switchTabById(hash);
-        } else {
-            switchTabById('profile');
-        }
+function closeViewer() {
+    document.getElementById('viewer').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function closeViewerBackdrop(e) {
+    if (e.target === document.getElementById('viewer')) closeViewer();
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    closeViewer();
+    document.querySelectorAll('.proj-backdrop.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
     });
+});
 </script>
 </body>
 </html>

@@ -1,123 +1,47 @@
 /* ═══════════════════════════════════════════
-   H & S Lab — modal.js
-   Handles:
-     · Project detail modal  (openProject / closeProject)
-     · File viewer modal     (viewFile)
-     · Shared Escape / backdrop close
-   nav.js handles sidebar toggles & tab switching
+   H & S Lab — nav.js
+   Điều khiển Sidebar Menu và Tab Switching
    ═══════════════════════════════════════════ */
 
-/* ─────────────────────────────────────
-   SHARED MODAL UTILITIES
-───────────────────────────────────── */
-
-/** Lock / unlock body scroll when any modal is open */
-function _lockScroll()   { document.body.style.overflow = 'hidden'; }
-function _unlockScroll() {
-    /* only unlock if NO modal is still open */
-    if (!document.querySelector('.modal-backdrop.open')) {
-        document.body.style.overflow = '';
-    }
+/* Đóng/mở menu trên điện thoại */
+function toggleMob() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.classList.toggle('open');
 }
 
-/** Close backdrop on outside click */
-function closeOnBackdrop(event, el) {
-    if (event.target === el) closeModal(el.id);
+/* Đóng/mở menu con (Profile, Projects, Files) */
+function toggleSub(id, el) {
+    const sub = document.getElementById(id);
+    if (sub) sub.classList.toggle('open');
+    if (el) el.classList.toggle('open');
 }
 
-/** Generic close — works for any modal-backdrop by id */
-function closeModal(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.remove('open');
-    _unlockScroll();
-}
-
-/** Escape key closes any open modal */
-document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    document.querySelectorAll('.modal-backdrop.open').forEach(function (el) {
-        el.classList.remove('open');
+/* Chuyển section ở trang chủ (index.html) */
+function goSection(id, el) {
+    // Ẩn tất cả các trang
+    document.querySelectorAll('.page').forEach(function(p) {
+        p.classList.remove('active');
     });
-    _unlockScroll();
-});
+    // Hiện trang được chọn
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
 
-/* ─────────────────────────────────────
-   PROJECT MODAL
-───────────────────────────────────── */
+    // Cập nhật trạng thái active trên sidebar
+    document.querySelectorAll('.nav-section > .nav-item').forEach(function(i) {
+        i.classList.remove('active');
+    });
+    if (el) el.classList.add('active');
 
-/**
- * openProject('proj-scad')  — pass the modal id
- * called from card onclick in HTML
- */
-function openProject(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.add('open');
-    _lockScroll();
-}
-
-/* ─────────────────────────────────────
-   FILE VIEWER MODAL
-───────────────────────────────────── */
-
-/**
- * viewFile('../project/Hoang/Install_Geant4.txt', 'Install_Geant4.txt')
- * called from file-row buttons in HTML
- */
-async function viewFile(path, name) {
-    const backdrop = document.getElementById('file-viewer');
-    const titleEl  = document.getElementById('fv-title');
-    const subtitleEl = document.getElementById('fv-subtitle');
-    const dlBtn    = document.getElementById('fv-dl');
-    const toolbar  = document.getElementById('fv-toolbar');
-    const langEl   = document.getElementById('fv-lang');
-    const linesEl  = document.getElementById('fv-lines');
-    const preEl    = document.getElementById('fv-pre');
-    const noteEl   = document.getElementById('fv-note');
-
-    /* reset state */
-    titleEl.textContent    = name;
-    subtitleEl.textContent = path;
-    dlBtn.href             = path;
-    dlBtn.download         = name;
-    preEl.textContent      = 'Loading…';
-    linesEl.textContent    = '';
-    noteEl.style.display   = 'none';
-
-    /* detect language from extension */
-    const ext = name.split('.').pop().toLowerCase();
-    const langMap = {
-        txt:'plain text', cpp:'C++', c:'C', py:'Python',
-        scad:'OpenSCAD', ino:'Arduino / C++', pdf:'PDF', md:'Markdown'
-    };
-    langEl.textContent = langMap[ext] || ext;
-
-    backdrop.classList.add('open');
-    _lockScroll();
-
-    try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const text = await res.text();
-        preEl.textContent  = text;
-        linesEl.textContent = text.split('\n').length + ' lines';
-    } catch (err) {
-        preEl.textContent = '⚠  ' + err.message;
-        if (location.protocol === 'file:') {
-            noteEl.style.display = 'block';
-        }
+    // Tự động đóng menu trên điện thoại sau khi chọn
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
     }
 }
 
-/* ─────────────────────────────────────
-   HOANG PAGE — TAB SWITCHING
-   (page-specific; sang.html has its own)
-───────────────────────────────────── */
-
+/* Chuyển Tab cho trang Hoang và Sang (Profile / Projects / Files) */
 function switchTabById(tabId) {
-    const tabBar = document.getElementById('hoang-tabs') ||
-                   document.getElementById('sang-tabs');
+    const tabBar = document.getElementById('hoang-tabs') || document.getElementById('sang-tabs');
     if (!tabBar) return;
 
     tabBar.querySelectorAll('.tab').forEach(function (t) {
@@ -128,7 +52,7 @@ function switchTabById(tabId) {
         p.classList.toggle('active', p.id === tabId);
     });
 
-    /* sync sidebar sub-item highlight */
+    /* Đồng bộ trạng thái active của menu con trên sidebar */
     const subId = tabBar.id === 'hoang-tabs' ? 'sub-h' : 'sub-s';
     const subEl = document.getElementById(subId);
     if (subEl) {
@@ -141,9 +65,11 @@ function switchTabById(tabId) {
     history.replaceState(null, '', '#' + tabId);
 }
 
-/* activate tab from URL hash on page load */
+/* Tự động mở tab dựa trên đường dẫn URL khi tải trang */
 document.addEventListener('DOMContentLoaded', function () {
     const hash = window.location.hash.replace('#', '');
     const valid = ['profile', 'projects', 'files'];
-    switchTabById(valid.includes(hash) ? hash : 'profile');
+    if (document.getElementById('hoang-tabs') || document.getElementById('sang-tabs')) {
+        switchTabById(valid.includes(hash) ? hash : 'profile');
+    }
 });
